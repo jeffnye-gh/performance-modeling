@@ -77,6 +77,19 @@ More or less alphabetical
 - [Sparta](XYZ)
     - FIXME
 
+- [Mavis](https://github.com/sparcians/mavis)
+    - disassembler, etc
+    - FIXME
+
+- [Verilator](https://www.veripool.org/verilator/)
+    - FIXME
+
+- [Ripes](https://github.com/mortbopet/Ripes/tree/master/src)
+    - FIXME
+
+- [riscvp](https://github.com/agra-uni-bremen/riscv-vp)
+    - FIXME
+
 - [Helios/Argos](XYZ)
     - FIXME
 
