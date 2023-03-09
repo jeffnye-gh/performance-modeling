@@ -26,7 +26,6 @@ The TOC attempts to list the steps in the required order up to riscv-perf-model.
     1. [Install latest docker](##install-latest-docker)
     1. [Hello world test](##hello-world-test)
 
-<br/>
 # Install Miniconda on Ubuntu 22
 
 - cd to/some/where
@@ -40,7 +39,6 @@ The TOC attempts to list the steps in the required order up to riscv-perf-model.
     - I am not executing this command
 - open a new termimal or reload your environment
 
-<br/>
 # Install Map/Sparta on Ubuntu 22
 
 ## Pre-reqs
@@ -96,12 +94,6 @@ Original instructions are [HERE](https://github.com/riscv-software-src/riscv-per
 - cd riscv-perf-model
 - 
 
-<br/>
-# Install conda on Ubuntu 22
-
-This presumes you have cloned riscv-perf-model. 
-
-<br/>
 # Install docker on Ubuntu 22
 ## Remove previous install  
 
