@@ -1,224 +1,156 @@
-# FOSS modeling tools
+# How-To Instructions
 
-## Sparcians 
+At present everything assumes installation on Ubuntu 22 with sudo rights.
 
-[Sparcians](https://github.com/sparcians)
+The TOC attempts to list the steps in the required order up to riscv-perf-model. The docker instructions are extra.
 
-These are the packages I'm interested in. Not sure why they have a copy of spike, this is not the official repo for riscv-isa-sim.
+## TOC
 
-The organization and naming is inconsistent.
+1. [Install Miniconda on Ubuntu 22](#install-miniconda-on-ubuntu-22)
 
-The interesting tools are Olympia, STF and the pipeview known variously as Helios/PipeViewer/pipe_view and argos.py
+1. [Install Map/Sparta on Ubuntu 22](#install-map-sparta-on-ubuntu-22)
+    2. Pre-req
+    3. Install the collateral for Ubuntu 22
+    3. Clone the repo
 
-<ul>
-  <li>Map  - modeling architecture platform
-    <ul> <li> This is the umbrella </ul>
-  <li> STF - simulation tracing format
-    <ul> <li> There is a library and tools </ul>
-  <li>Olympia
-    <ul><li>OOO trace driven perf model</ul>
-  <li>riscv-isa-sim
-    <ul>
-        <li>This is spike et al
-        <li>I do not know why they have their own copy
-    </ul>
-  <li>Helios/PipeViewer/pipe_view/argos.py
-    <ul><li> A pipeline viewer using STF</ul>
-  <li> MAP/Docker</li>
-    <ul>
-      <li>This may be the way to go for MAP. 
-      <li> Installing MAP has been a larger chore than expected
-    </ul>
-</ul>
-
-## BOOM/CHIPS Alliance/Chip Yard
-
-I'm grouping these together, but structure and separation isnt always clear. 
-
-[ChipsAlliance](https://github.com/chipsalliance)
-
-[RISCV-BOOM](https://github.com/riscv-boom)
-
-[ChipYard](https://github.com/ucb-bar/chipyard)
-
-Dromajo and BOOM are interesting.
-
-<ul>
-  <li> Dromajo
-    <ul>
-      <li> A model suitable for co-simulation with RTL.
-      <li> Supports RV64VGC, unclear
-      <li> With a patch provided by Sparcians this cooperates with
-      <li> Co-operates with Olympia and the Sparcians/Map tools
-    </ul>
-  <li> BOOM aka riscv-boom
-    <ul>
-      <li> OOO machine, implemented in Chisel
-      <li> renders to Verilog thru <b>firrtl</b>
-    </ul>
-</ul>
-
-## RISC-V Software
-
-[RISC-V Intnl Repos](https://github.com/riscv-software-src)
-
-[Spike](https://github.com/riscv-software-src/riscv-isa-sim)
-
-[ProxyKernel](https://github.com/riscv-software-src/riscv-pk)
-
-These are well known, here for reference.
+1. [Install riscv-perf-model on Ubuntu 22](#install-riscv-perf-model-on-ubuntu-22)
+    2. Pre-reqs
+    3. Clone the repo
+    3. Install the conda environment
 
 
-# Install Docker on Ubuntu
+1. [Install docker on Ubuntu 22](#install-docker-on-ubuntu-22)
 
-The MAP tools are problematic even on Ubuntu. Argos' log file parser uses wx widgets which has a painful set of pre-reqs.
+    1. [Remove previous install](##remove-previous-install)
+    1. [Update and install collateral](##update-and-install-collateral)
+    1. [Install latest docker](##install-latest-docker)
+    1. [Hello world test](##hello-world-test)
 
-Docker may be the way to go if we use these tools.
+<br/>
+# Install Miniconda on Ubuntu 22
 
-I'll remove the advisory when I'm happy with the install. I'll add a RHEL version when I have an RHEL instance to play with.
+- cd to/some/where
+- wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+- sh ./Minconda3-latest-Linux-x86_64.sh
+- follow the instructions for license, etc. 
+    - I am using the default install location
+    - I am allowing the installer to run conda init
+    - The text instructions tell you how to disable miniconda activation at startup
+        - conda config --set auto_activate_base false
+    - I am not executing this command
+- open a new termimal or reload your environment
 
-<b> This has not been tested, if in doubt about your ability to recover from this, dont do it at all.</b>
+<br/>
+# Install Map/Sparta on Ubuntu 22
 
-## Remove previous installations of docker, if any
+## Pre-reqs
 
-<ul>
-  <li> sudo apt remove docker-desktop
-  <li> rm -r $HOME/.docker/desktop
-  <li> sudo rm /usr/local/bin/com.docker.cli
-  <li> sudo apt purge docker-desktop
-  <li> sudo apt update
-  <li> sudo apt upgrade
-</ul>
+- Install Miniconda - see above
+- Open a new terminal
 
-### Update/install collateral
-<ul>
-  <li> sudo apt install ca-certificates curl gnupg lsb-release
-  <li> sudo mkdir -m 0755 -p /etc/apt/keyrings
-  <li> curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-  <li> echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-  <li> sudo apt-get update
-    <ul>
-      <li> If you get an GPG error with apt update do this:
-        <ul>
-          <li> sudo chmod a+r /etc/apt/keyrings/docker.gpg
-          <li> sudo apt-get update
-        </ul>
-    </ul>
- </ul>
+## Install the collateral for Ubuntu 22
 
-### Install latest docker
-<ul>
-  <li> sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-  <li> sudo docker run hello-world
-</ul>
+There might be bugs in this. I do not have a virgin Ubuntu, there might be missing packages not listed in the documentation, some of these packages may not be needed or have the wrong names.
 
-### Test docker
-<ul>
-  <li> sudo docker run hello-world
-</ul>
+- sudo apt install cmake sqlite doxygen (no equiv: hdf5 yaml-cpp rapidJson xz)
+- The names change for Unbuntu (from Centos) so:
+    - sudo apt install hdf5-tools h5utils
+    - sudo apt install libyaml-cpp-dev
+    - sudo apt install rapidjson-dev
+    - sudo apt install xz-utils
 
-You should see these lines
+## Clone the repo
 
-...snip...
+- cd to/some/where
+- git clone https://github.com/sparcians/map.git
+- cd map/sparta
 
-Hello from Docker!
+## Build Sparta
+ See the apt install for support packages above in  Pre-reqs
 
-This message shows that your installation appears to be working correctly.
+- cd .../map/sparta
+- mkdir release; cd release
+- cmake .. -DCMAKE_BUILD_TYPE=Release
+- make -j4   (idk-why, -j16 crashes my gnome terminal, weird)
 
-...snip...
+<br/>
+# Install riscv-perf-model on Ubuntu 22
 
-<!--
-# Build Dromajo
+riscv-perf-model aka Olympia. Olympia is a trace driven OOO performance model. It appears to be incomplete, there is an advisory that renaming does not work. It does have some interesting capabilities in terms of trace input formats in [STF](https://github.com/sparcians/stf_spec) and [JSON](https://github.com/riscv-software-src/riscv-perf-model/tree/master/traces#json-inputs).
 
-### FIXME 
+## Pre-reqs
 
-## 1.2 Build bootable image
+- Install Miniconda - see above
+- Install Sparta - see above
 
-### 1.2.1 Download buildroot image
+## Clone the repo
 
-cd /home/jeff/Development/riscv-perf-model
-
-mkdir buildroot; cd buildroot
-
-wget https://github.com/buildroot/buildroot/archive/2020.05.1.tar.gz
-
-## 1.3 Instrument test case
-Add START_TRACE/STOP_TRACE to source
-
-See /home/jeff/Development/riscv-perf-model/traces/stf_trace_gen/qsort
-
-make
-
-## 1.4 
-
-## 1.1 Location
-
-/home/jeff/Development/riscv-perf-model/traces/stf_trace_gen/dromajo/build
-
-# 100. Example instrumented App - Requires Bootimg
-
-```
-qsort.c
-    #include "trace_macros.h"
-    #include <stdio.h>
-    #include <stdlib.h>
-
-    int compare (const void * a, const void * b)
-    {
-      int data1 = *(int *)a, data2 = *(int *)b;
-      if(data1 < data2) // a < b
-        return -1;
-      else if(data1 == data2) // a == b
-        return 0;
-      else
-        return 1;  // a > b
-    }
-
-    main ()
-    {
-      START_TRACE;
-      int i = 0, numbers = 5;
-      int data[] = {3, 40, 2, 1, 10};
-      qsort (data, numbers, sizeof(int), compare);
-      for (i=0; i < numbers; i++)
-         printf ("%d ", data[i]);
-      STOP_TRACE;
-
-      return 0;
-    }
-
-Makefile
-
-.PHONY: default clean
-CC = /mnt/usr/local/riscv64-unknown-elf/bin/riscv64-unknown-elf-gcc
-ARCH=-march=rv64g -mabi=lp64d
-OPT = -O0
-
-TGT = qsort
-SRC = qsort.c
-OBJ = qsort.o
-DEP = qsort.d
-LIBS=
-INC = -I..
-
-CFLAGS = -MMD -MP $(ARCH) $(OPT) $(INC)
-LFLAGS =
-default: $(TGT)
-%.o: %.c
-  $(CC) -c $(CFLAGS) -o $@ $<
-$(TGT): $(OBJ)
-  $(CC) -o $@ $^ $(LIBS)
-clean:
-  -rm -f *.o *.d $(TGT)
+- cd to/some/where
+- git clone https://github.com/riscv-software-src/riscv-perf-model.git
 
 
-```
+## Install the conda environment
 
-mkdir myapp; cd myapp
-cat myapp.c << "/home/jeff/Development/riscv-perf-model
+Original instructions are [HERE](https://github.com/riscv-software-src/riscv-perf-model/tree/master/conda)
 
-## Boot linux
+- cd riscv-perf-model
+- 
 
--->
+<br/>
+# Install conda on Ubuntu 22
+
+This presumes you have cloned riscv-perf-model. 
+
+<br/>
+# Install docker on Ubuntu 22
+## Remove previous install  
+
+Remove any test docker support or images as necessary.
+
+- sudo apt remove docker-desktop
+- rm -r $HOME/.docker/desktop
+- sudo rm /usr/local/bin/com.docker.cli
+- sudo apt purge docker-desktop
+- sudo apt update
+- sudo apt upgrade
+## Update and install collateral
+
+Install the support packages as needed. There is one step below that is not in list form (echo "deb...). 
+
+- sudo apt install ca-certificates curl gnupg lsb-release
+- sudo mkdir -m 0755 -p /etc/apt/keyrings
+- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+<br />
+- The following is unformated due to control characters
+<pre>
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+</pre>
+- sudo apt-get update
+
+If you get an GPG error with apt update:
+
+- sudo chmod a+r /etc/apt/keyrings/docker.gpg
+- sudo apt-get update
+
+## Install latest docker
+
+Actual docker installation
+
+- sudo apt install docker-ce docker-ce-cli containerd.io 
+- sudo apt docker-buildx-plugin docker-compose-plugin
+
+## Hello world test
+
+Run the install check
+
+- sudo docker run hello-world
+
+You should see this in the console:
+
+> > Hello from Docker!
+
+> > This message shows that your installation appears to be working correctly.
+
+
+
+
