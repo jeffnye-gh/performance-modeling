@@ -1,16 +1,13 @@
 # How-To Instructions
 
-Much of this information is found in the README's distributed with the source packages. But in a number of cases it was necessary to work around issues in the distributions. Those work arounds are documented here.
+These instructions make corrections and add steps to the information provided by the package README's.
 
-In the ideal these are recipes that can be cut/pasted into a session without any trial and error.
+There are a few work arounds for compile and interoperability issues in the details below.
 
-At present everything assumes installation on Ubuntu 22 with sudo rights.
-
+This version assumes installation on Ubuntu 22 with sudo rights.
 
 ------
 # TOC
-
-The TOC attempts to list the steps in the required order up to riscv-perf-model. The docker instructions are extra.
 
 1. [Assumed local environment variables](#assumed-local-environment-variables)
 
@@ -41,9 +38,7 @@ The TOC attempts to list the steps in the required order up to riscv-perf-model.
 
 # Assumed local environment variables
 
-A few bash environment variables is defined to reduce typing in these instructions.
-
-These do not need to be a permanent part of your environment.
+Bash environment variables defined for clarity. These do not need to be a regular part of your environment.
 
 - WGETTMP
     - Some packages require manual download using wget.
@@ -68,12 +63,18 @@ These do not need to be a permanent part of your environment.
 
 Miniconda package manager is used by Sparcians.
 
-- Follow the instructions for license, etc. 
-    - I am using the default install location
-    - I am allowing the installer to run conda init
-    - The text instructions tell you how to disable miniconda activation at startup
-        - conda config --set auto_activate_base false
-        - I am not executing this command
+In accepting the license:
+
+- I am using the default install location
+
+- I am allowing the installer to run conda init
+
+
+The license instructions tell you how to disable miniconda activation at startup
+
+- conda config --set auto_activate_base false
+
+I am not executing this command
 
 
 ```
