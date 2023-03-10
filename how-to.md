@@ -14,11 +14,11 @@ The TOC attempts to list the steps in the required order up to riscv-perf-model.
 
 1. [Local environment variables](#local-environment-variables)
 
-    1. wget tmp directory
+    2. wget tmp directory
 
-    1. Sparcians/Map env var
+    3. Sparcians/Map env var
 
-    1. riscv-perf-model env var
+    4. riscv-perf-model env var
 
 1. [Install Miniconda on Ubuntu 22](#install-miniconda-on-ubuntu-22)
 
