@@ -13,37 +13,57 @@ At present everything assumes installation on Ubuntu 22 with sudo rights.
 The TOC attempts to list the steps in the required order up to riscv-perf-model. The docker instructions are extra.
 
 1. [Local environment variables](#local-environment-variables)
-    2. wget tmp directory
-    3. Sparcians/Map env var
-    4. riscv-perf-model env var
+
+    1. wget tmp directory
+
+    1. Sparcians/Map env var
+
+    1. riscv-perf-model env var
 
 1. [Install Miniconda on Ubuntu 22](#install-miniconda-on-ubuntu-22)
 
 1. [Install Map/Sparta on Ubuntu 22](#install-map-sparta-on-ubuntu-22)
-    2. Pre-req
-    3. Install the collateral for Ubuntu 22
-    3. Clone the repo
-    4. Edit the source files (for Olympia)
-    4. Build Sparta
+
+    1. Pre-req
+
+    1. Install the collateral for Ubuntu 22
+
+    1. Clone the repo
+
+    1. Edit the source files (for Olympia)
+
+    1. Build Sparta
 
 1. [Install Map/Argos on Ubuntu 22](#install-map-argos-on-ubuntu-22)
-    2. Pre-req
-    3. Install the collateral for Ubuntu 22
-    4. Install the conda packages for Ubuntu 22
-    4. Build PipeView
+
+    1. Pre-req
+
+    1. Install the collateral for Ubuntu 22
+
+    1. Install the conda packages for Ubuntu 22
+
+    1. Build PipeView
 
 1. [Install riscv-perf-model on Ubuntu 22](#install-riscv-perf-model-on-ubuntu-22)
-    2. Pre-reqs
-    3. Clone the repo
-    3. Patch/modify the repo
-    4. Build the simulator
+
+    1. Pre-reqs
+
+    1. Clone the repo
+
+    1. Patch/modify the repo
+
+    1. Build the simulator
 
 1. [Using pipeline data views](#using-pipeline-data-views)
 
 1. [Install docker on Ubuntu 22](#install-docker-on-ubuntu-22)
+
     1. [Remove previous install](##remove-previous-install)
+
     1. [Update and install collateral](##update-and-install-collateral)
+
     1. [Install latest docker](##install-latest-docker)
+
     1. [Hello world test](##hello-world-test)
 
 ------
