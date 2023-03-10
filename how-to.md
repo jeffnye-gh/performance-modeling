@@ -26,14 +26,6 @@ This version assumes installation on Ubuntu 22 with sudo rights.
 
 1. [Install docker on Ubuntu 22](#install-docker-on-ubuntu-22)
 
-    1. [Remove previous install](##remove-previous-install)
-
-    1. [Update and install collateral](##update-and-install-collateral)
-
-    1. [Install latest docker](##install-latest-docker)
-
-    1. [Hello world test](##hello-world-test)
-
 ------
 
 # Assumed local environment variables
@@ -86,7 +78,7 @@ sh ./Minconda3-latest-Linux-x86_64.sh
 
 ---------
 
-# Install Map/Sparta on Ubuntu 22
+# Install Map Sparta on Ubuntu 22
 
 ## Pre-reqs
 
@@ -334,7 +326,7 @@ Remove any test docker support or images as necessary.
 
 ## Update and install collateral
 
-Install the support packages as needed. There is one step below that is not in list form (echo "deb...). 
+Install the support packages as needed.
 
 ```
     sudo apt install ca-certificates curl gnupg lsb-release
