@@ -11,20 +11,17 @@ This version assumes installation on Ubuntu 22 with sudo rights.
 
 1. [Assumed local environment variables](#assumed-local-environment-variables)
 
-1. [Install Miniconda on Ubuntu 22](#install-miniconda-on-ubuntu-22)
+1. [Install Miniconda](#install-miniconda)
 
-1. [Install Map/Sparta on Ubuntu 22](#install-map-sparta-on-ubuntu-22)
+1. [Install Map Sparta](#install-map-sparta)
 
+1. [Install Map Argos](#install-map-argos)
 
-1. [Install Map/Argos on Ubuntu 22](#install-map-argos-on-ubuntu-22)
-
-
-1. [Install riscv-perf-model on Ubuntu 22](#install-riscv-perf-model-on-ubuntu-22)
-
+1. [Install riscv-perf-model](#install-riscv-perf-model)
 
 1. [Using pipeline data views](#using-pipeline-data-views)
 
-1. [Install docker on Ubuntu 22](#install-docker-on-ubuntu-22)
+1. [Install docker](#install-docker)
 
 ------
 
@@ -49,9 +46,8 @@ Bash environment variables defined for clarity. These do not need to be a regula
     - This var points to the riscv-perf-model (aka Olympia) repo copy
     - <b>export OLYMPIA=/home/jeff/Development/riscv-perf-model</b>
 
-------
-
-# Install Miniconda on Ubuntu 22
+----------------------------------------------------------
+# Install Miniconda
 
 Miniconda package manager is used by Sparcians.
 
@@ -76,9 +72,8 @@ sh ./Minconda3-latest-Linux-x86_64.sh
 ```
 <i>open new terminal or reload your environment>/i>
 
----------
-
-# Install Map Sparta on Ubuntu 22
+----------------------------------------------------------
+# Install Map Sparta
 
 ## Pre-reqs
 
@@ -114,7 +109,6 @@ If you are building Olympia (riscv-perf-model) make these changes to these files
     - Change $MAP/sparta/src/TreeNodeExtensions.cpp
     - Roughly line 72, comment out the destructor
 
-
 ```
     //ExtensionsParamsOnly::~ExtensionsParamsOnly()
     //{
@@ -142,7 +136,7 @@ If you are building Olympia (riscv-perf-model) make these changes to these files
 
 ---------
 
-# Install Map/Argos on Ubuntu 22
+# Install Map Argos on Ubuntu 22
 
 Argos is a python pipe viewer for trace based performance models. It is variously named, even within the repo, as Helio, Argos, pipeViewer, or pipe_view. The python script is argos.py
 
