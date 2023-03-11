@@ -1,10 +1,9 @@
+[Back to README](./README.md)
+
 # How-To Instructions
 
-These instructions make corrections and add steps to the information provided by the package README's.
-
-There are a few work arounds for compile and interoperability issues in the details below.
-
-This version assumes installation on Ubuntu 22 with sudo rights.
+I made corrections to the source package files to get these to compile
+and run Ubuntu 22, GCC-11. You need sudo for this.
 
 ------
 # TOC
@@ -20,6 +19,8 @@ This version assumes installation on Ubuntu 22 with sudo rights.
 1. [Install riscv-perf-model](#install-riscv-perf-model)
 
 1. [Using pipeline data views](#using-pipeline-data-views)
+
+1. [Patching Dromajo for trace generation](#patching-dromajo-for-trace-generation)
 
 1. [Install docker](#install-docker)
 
@@ -136,7 +137,7 @@ If you are building Olympia (riscv-perf-model) make these changes to these files
 
 ---------
 
-# Install Map Argos on Ubuntu 22
+# Install Map Argos
 
 Argos is a python pipe viewer for trace based performance models. It is variously named, even within the repo, as Helio, Argos, pipeViewer, or pipe_view. The python script is argos.py
 
@@ -150,7 +151,7 @@ There is likely cleanup possible in this list, but this is what I did. I'll simp
 - Install Miniconda - see above
 - Install Map/Sparta - see above
 
-## Install the Map/Argos collateral for Ubuntu 22
+## Install the Map Argos collateral
 
 This tool has a stupidly long dependency chain. wxpython-tools was called python-wxtools. attrdict3 replaces attrdict.
 
@@ -162,7 +163,7 @@ This tool has a stupidly long dependency chain. wxpython-tools was called python
     pip3 install pyyaml
 ```
 
-## Install the Map/Argos conda packages for Ubuntu 22
+## Install the Map Argos conda packages
 
 - Start a terminal with miniconda activated. See above.    
     - The prompt will look like (base):
@@ -194,55 +195,10 @@ Your terminal should have an active sparta/conda dev environment. See above.
     make -j4
 ```
 
----------
-
-# Using Map/Argos/PipeView pipeline data views
-
-## Prereqs
-
-This assumes you have followed the instructions above for these steps.
-
-- Install Miniconda on Ubuntu 22
-- Install Map/Sparta on Ubuntu 22
-- Install Map/Argos on Ubuntu 22
-- FIXME: it's possible you also need: 
-    - Install riscv-perf-model on Ubuntu 22
-
-## Create example core model
-
-```
-    cd $MAP/sparta/release/example/CoreModel
-    make
-```
-
-## Generate pipeline database
-
-```
-    cd $MAP/sparta/release/example/CoreModel
-    ./sparta_core_example -i 1000 -z pipeout_
-```
-
-## View pipe output
-
-### Pipeline data in single cycle view
-
-```
-    python3 ${MAP}/helios/pipeViewer/pipe_view/argos.py --database pipeout_ --layout-file cpu_layout.alf
-```
-
-### Pipeline data in multi-cycle view
-
-```
-    python3 ${MAP}/helios/pipeViewer/pipe_view/argos.py --database pipeout_ --layout-file cpu_layout.alf
-```
 
 ---------
 
-
-
----------
-
-# Install riscv-perf-model on Ubuntu 22
+# Install riscv-perf-model
 
 riscv-perf-model aka Olympia. Olympia is a trace driven OOO performance model. 
 
@@ -301,9 +257,55 @@ Choose what to build. I chose just olympia.
     make regress 
 ```
 
---------
+---------
 
-# Install docker on Ubuntu 22
+# Using pipeline data views
+
+## Prereqs
+
+This assumes you have followed the instructions above for these steps.
+
+- Install Miniconda on Ubuntu 22
+- Install Map/Sparta on Ubuntu 22
+- Install Map/Argos on Ubuntu 22
+- FIXME: it's possible you also need: 
+    - Install riscv-perf-model on Ubuntu 22
+
+## Create example core model
+
+```
+    cd $MAP/sparta/release/example/CoreModel
+    make
+```
+
+## Generate pipeline database
+
+```
+    cd $MAP/sparta/release/example/CoreModel
+    ./sparta_core_example -i 1000 -z pipeout_
+```
+
+## View pipe output
+
+### Pipeline data in single cycle view
+
+```
+    python3 ${MAP}/helios/pipeViewer/pipe_view/argos.py --database pipeout_ --layout-file cpu_layout.alf
+```
+
+### Pipeline data in multi-cycle view
+
+```
+    python3 ${MAP}/helios/pipeViewer/pipe_view/argos.py --database pipeout_ --layout-file cpu_layout.alf
+```
+
+--------
+# Patching Dromajo for trace generation
+
+## FIXME
+
+--------
+# Install docker
 
 ## Remove previous install
 

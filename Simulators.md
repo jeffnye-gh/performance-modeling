@@ -1,9 +1,13 @@
+[Back to README](./README.md)
+
 # RISC-V Simulators
+
+I have not vetted all of these.
 
 - [Dromajo](https://github.com/chipsalliance/dromajo)
     - "It is a RISC-V RV64GC emulator designed for RTL co-simulation."
     - This can be patched for instrumented execution of user mode software
-    - See the Sparcians resource page under Modeling Tools
+    - See [FIXME link to how-to](./How-to.md)
 
 - [GEM5](https://github.com/gem5/gem5)
     - As of 2023.03.07 site claims priv instruction set is work in progress
@@ -20,9 +24,12 @@
     - Claims full system, linux kernel, boot, real time IO
 
 - [Olympia](https://github.com/riscv-software-src/riscv-perf-model)
-    - OOO RISC-V performance model - renaming not implemented
+    - OOO RISC-V performance model - framework only
     - Trace based modeling - functional backend "in progress"
     - Requires Sparta/Sparcians tool set
+    - 2/3/8 wide machines
+    - [Presentation](https://www.youtube.com/watch?v=739lNpMWpQI)
+    - [Issues/Status](https://github.com/riscv-software-src/riscv-perf-model/issues)
 
 - [QEMU](https://github.com/qemu/qemu)
     - Board level simulation platform
@@ -31,12 +38,19 @@
 - [riscv-ovpsim](https://github.com/riscv-admin/riscv-ovpsim)
     - Open source from Imperas, has commerical option
     - Virtual platform style model, boots linux
+    - [Github](https:://github.com/riscv-ovpsim)
+    - ["Enhanced Version"](https://www.ovpworld.org/riscvOVPsimPlus)
 
 - [Sail-RISC-V](https://github.com/riscv/sail-riscv)
     - according to RISC-V Intl. this is now the RISCV reference model
         - [See RISC-V org page](https://wiki.riscv.org/display/HOME/Emulators+and+Simulators)
     - Functional simulator (ISS)
     - Claims to boot BSD linux in 2 mins (300KIPS)
+
+- [Sparta](https://github.com/sparcians/map)
+    - FIXME
+    - Docs: https://sparcians/github.io/map/index.html
+    - Api: https://sparcians/github.io/map/modeling.html
 
 - [Spike](https://github.com/riscv/riscv-isa-sim)
     - canonical reference model, superceeded by a Sail implementation
