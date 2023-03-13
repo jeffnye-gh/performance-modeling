@@ -405,6 +405,7 @@ Check if patch worked, dromajo should have the --stf_trace option
     console:
         --stf_trace <filename>  Dump an STF trace
 ```
+
 ------------------------------------------------------------------------
 # Boot Linux on Dromajo
 
