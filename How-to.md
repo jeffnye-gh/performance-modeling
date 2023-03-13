@@ -133,9 +133,11 @@ sh ./Minconda3-latest-Linux-x86_64.sh
 
 There might be bugs in this. I do not have a virgin Ubuntu, there might be missing packages not listed in the documentation, some of these packages may not be needed or have the wrong names.
 
-- sudo apt install cmake sqlite doxygen (no equiv: hdf5 yaml-cpp rapidJson xz)
-- The names change for Unbuntu (from Centos) so:
+```
+    sudo apt install cmake sqlite doxygen (no equiv: hdf5 yaml-cpp rapidJson xz)
+```
 
+- The names change for Unbuntu (from Centos) so:
 
 ```
     sudo apt install hdf5-tools h5utils
