@@ -434,7 +434,7 @@ FIXME: ADD THESE FILES TO REPO AND INSTRUCTIONS TO RETRIEVE THEM.
 ## Download and compile kernel
 
 You must have previously installed the riscv tool chain.
-See [Install riscv gnu tool Chain](##install-riscv-gnu-tool-chain)
+See [Install riscv gnu tool Chain](#install-riscv-gnu-tool-chain)
 
 ```
     cd $DROMAJO
