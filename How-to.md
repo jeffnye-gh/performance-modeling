@@ -156,6 +156,8 @@ There might be bugs in this. I do not have a virgin Ubuntu, there might be missi
 
 If you are building Olympia (riscv-perf-model) make these changes to these files:
 
+<b>FIXME: Create the patch files, and include patch instructions for these and the other source file changes (buildroot, etc).</b>
+
 - Edit:
     - Change $MAP/sparta/src/TreeNodeExtensions.cpp
     - Roughly line 72, comment out the destructor
