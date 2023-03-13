@@ -2,6 +2,8 @@
 
 # How-To Instructions
 
+WORK IN PROGRESS. THIS IS A CHECKPOINT OF ACTIVE WORK.
+
 I made corrections to the source package files to get these to compile
 and run Ubuntu 22, GCC-11. You need sudo for this.
 
