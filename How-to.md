@@ -10,6 +10,8 @@ and run Ubuntu 22, GCC-11. You need sudo for this.
 
 1. [Assumed local environment variables](#assumed-local-environment-variables)
 
+1. [Install riscv gnu tool chain](#install-riscv-gnu-tool-chain)
+
 1. [Install Miniconda](#install-miniconda)
 
 1. [Install Map Sparta](#install-map-sparta)
@@ -20,7 +22,9 @@ and run Ubuntu 22, GCC-11. You need sudo for this.
 
 1. [Using pipeline data views](#using-pipeline-data-views)
 
-1. [Patching Dromajo for trace generation](#patching-dromajo-for-trace-generation)
+1. [Setup Dromajo for tracing](#setup-dromajo-for-tracing)
+
+1. [Boot linux on Dromajo](#boot-linux-on-dromajo)
 
 1. [Install docker](#install-docker)
 
@@ -28,7 +32,10 @@ and run Ubuntu 22, GCC-11. You need sudo for this.
 
 # Assumed local environment variables
 
-Bash environment variables defined for clarity. These do not need to be a regular part of your environment.
+Bash environment variables defined for clarity. Not all need to be in your
+path.
+
+Except add $RV_GNU_TOOLS/bin to your path for these instructions.
 
 - WGETTMP
     - Some packages require manual download using wget.
@@ -46,6 +53,45 @@ Bash environment variables defined for clarity. These do not need to be a regula
 - OLYMPIA
     - This var points to the riscv-perf-model (aka Olympia) repo copy
     - <b>export OLYMPIA=/home/jeff/Development/riscv-perf-model</b>
+
+- RV_TOOLS_SRC
+    - This var points to the tool chain source directory
+    - <b>export RV_TOOLS_SRC=/home/jeff/Development/riscv-gnu-toolchain</b>
+ 
+- RV_GNU_TOOLS
+    - This var points to the GNU tool chain install directory. 
+    - <b>export RV_GNU_TOOLS=/home/jeff/Development/riscv-tools</b>
+
+- DROMAJO
+    - This var points to the dromajo under riscv-perf-model 
+    - <b>export DROMAJO=/home/jeff/Development/riscv-perf-model/traces/stf_trace_gen/dromajo</b>
+
+----------------------------------------------------------
+# Install riscv gnu tool chain
+
+They say you need 6.65GB of space.
+
+## Pre-req and clone
+
+```
+  sudo apt-get install autoconf automake autotools-dev curl python3 libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build
+
+  git clone https://github.com/riscv/riscv-gnu-toolchain
+  cd riscv-gnu-toolchain   (aka cd $RV_TOOLS_SRC)
+  mkdir -p $RV_GNU_TOOLS   (the install path)
+```
+
+## Configure, make and install
+
+Install path will be $RV_GNU_TOOLS.
+
+```
+  cd $RV_TOOLS_SRC
+  ./configure --prefix=$RV_GNU_TOOLS --enable-multilib
+  make -j4 linux
+
+```
+  
 
 ----------------------------------------------------------
 # Install Miniconda
@@ -299,12 +345,122 @@ This assumes you have followed the instructions above for these steps.
     python3 ${MAP}/helios/pipeViewer/pipe_view/argos.py --database pipeout_ --layout-file cpu_layout.alf
 ```
 
---------
-# Patching Dromajo for trace generation
+------------------------------------------------------------------------
+# Setup Dromajo for tracing
 
-## FIXME
 
---------
+## Clone and patch dromajo
+
+A patch is supplied to modify Dromajo to generate STF traces. These steps clone the repo, checkout the known compatible commit and patch the source.
+
+```
+    cd $OLYMPIA/traces/stf_trace_gen
+    git clone https://github.com/chipsalliance/dromajo
+    cd dromajo
+    git checkout 86125b31
+    git apply ../dromajo_stf_lib.patch
+    ln -s ../../../stf_lib
+```
+
+## Correct cmakd files 
+
+stf_lib/stf-config.cmake and Dromajo CMakeLists must be edited for correct compile. 
+
+
+```
+    cd $DROMAJO
+    vi $OLYMPIA/stf_lib/cmake/stf-config.cmake
+    change line ~14 to (remove _GLOBAL):
+        set_target_properties(Threads::Threads PROPERTIES IMPORTED TRUE)
+
+    vi ./CMakeLists.txt
+    change line ~53 to (change std to ++17)
+        -std=c++17
+```
+
+## Build dromajo
+
+```
+    cd $DROMAJO
+    mkdir -p build; cd build
+    cmake ..
+    make -j4
+```
+
+## Verify patch
+
+Check if patch worked, dromajo should have the --stf_trace option
+
+```
+    cd $DROMAJO/build
+    ./dromajo | grep stf_trace
+    console:
+        --stf_trace <filename>  Dump an STF trace
+```
+------------------------------------------------------------------------
+# Boot Linux on Dromajo
+
+## Create buildroot image
+
+The make of build root downloads some files. Some of these files need
+a patch so make is called multiple times.
+
+Prepatched files are provided to copy over the files with issues.
+FIXME: ADD THESE FILES TO REPO AND INSTRUCTIONS TO RETRIEVE THEM.
+
+```
+    cd $DROMAJO
+    wget https://github.com/buildroot/buildroot/archive/2020.05.1.tar.gz
+    tar xf 2020.05.1.tar.gz
+    cp run/config-buildroot-2020.05.1 buildroot-2020.05.1/.config
+    make -C buildroot-2020.05.1
+    (this will fail)
+    cp c-stack.c ./buildroot-2020.05.1/output/build/host-m4-1.4.18/lib/c-stack.c
+    make -C buildroot-2020.05.1
+    (this will fail)
+    cp libfakeroot.c ./buildroot-2020.05.1/output/build/host-fakeroot-1.20.2/libfakeroot.c
+    sudo make -C buildroot-2020.05.1
+    (this is expected to finish without error)
+``
+
+## Download and compile kernel
+
+You must have previously installed the riscv tool chain.
+See [Install riscv gnu tool Chain](##install-riscv-gnu-tool-chain)
+
+```
+    cd $DROMAJO
+    export CROSS_COMPILE=riscv64-unknown-linux-gnu-
+    wget -nc https://git.kernel.org/torvalds/t/linux-5.8-rc4.tar.gz
+    tar -xf linux-5.8-rc4.tar.gz
+    make -C linux-5.8-rc4 ARCH=riscv defconfig
+    make -C linux-5.8-rc4 ARCH=riscv -j16
+```
+
+## Download and compile OpenSBI
+
+```
+    cd $DROMAJO
+    export CROSS_COMPILE=riscv64-unknown-linux-gnu-
+    git clone https://github.com/riscv/opensbi.git
+    cd opensbi
+    git checkout tags/v0.8 -b temp2
+    # works too: git checkout 7be75f519f7705367030258c4410d9ff9ea24a6f -b temp
+    make PLATFORM=generic
+    cd ..
+```
+
+## Boot linux
+
+```
+    cd $DROMAJO
+    cp buildroot-2020.05.1/output/images/rootfs.cpio ./run
+    cp linux-5.8-rc4/arch/riscv/boot/Image ./run
+    cp opensbi/build/platform/generic/firmware/fw_jump.bin ./run
+    cd run
+    ../build/dromajo boot.cfg
+
+------------------------------------------------------------------------
 # Install docker
 
 ## Remove previous install
