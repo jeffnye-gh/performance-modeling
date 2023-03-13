@@ -111,7 +111,7 @@ The license instructions tell you how to disable miniconda activation at startup
 
 - conda config --set auto_activate_base false
 
-I am not executing this command
+- I am not executing this command
 
 
 ```
