@@ -370,7 +370,7 @@ A patch is supplied to modify Dromajo to generate STF traces. These steps clone 
     ln -s ../../../stf_lib
 ```
 
-## Correct cmakd files 
+## Correct cmake files 
 
 stf_lib/stf-config.cmake and Dromajo CMakeLists must be edited for correct compile. 
 
