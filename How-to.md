@@ -119,7 +119,7 @@ cd $WGETTMP
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 sh ./Minconda3-latest-Linux-x86_64.sh
 ```
-<i>open new terminal or reload your environment>/i>
+<i>open new terminal or reload your environment</i>
 
 ----------------------------------------------------------
 # Install Map Sparta
@@ -146,9 +146,11 @@ There might be bugs in this. I do not have a virgin Ubuntu, there might be missi
 
 ## Clone the repo
 
-- cd $TOP
-- git clone https://github.com/sparcians/map.git
-- cd $MAP/sparta
+```
+    cd $TOP
+    git clone https://github.com/sparcians/map.git
+    cd $MAP/sparta
+```
 
 ## Edit the source files (for Olympia)
 
