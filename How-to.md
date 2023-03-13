@@ -35,9 +35,9 @@ and run Ubuntu 22, GCC-11. You need sudo for this.
 # Assumed local environment variables
 
 Bash environment variables defined for clarity. Not all need to be in your
-path.
+env.
 
-Except add $RV_GNU_TOOLS/bin to your path for these instructions.
+Except: I assume $RV_GNU_TOOLS/bin is in your path for these instructions.
 
 - WGETTMP
     - Some packages require manual download using wget.
@@ -111,7 +111,7 @@ The license instructions tell you how to disable miniconda activation at startup
 
 - conda config --set auto_activate_base false
 
-I am not executing this command
+- I am not executing this command
 
 
 ```
@@ -119,7 +119,7 @@ cd $WGETTMP
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 sh ./Minconda3-latest-Linux-x86_64.sh
 ```
-<i>open new terminal or reload your environment>/i>
+<i>open new terminal or reload your environment</i>
 
 ----------------------------------------------------------
 # Install Map Sparta
@@ -133,9 +133,11 @@ sh ./Minconda3-latest-Linux-x86_64.sh
 
 There might be bugs in this. I do not have a virgin Ubuntu, there might be missing packages not listed in the documentation, some of these packages may not be needed or have the wrong names.
 
-- sudo apt install cmake sqlite doxygen (no equiv: hdf5 yaml-cpp rapidJson xz)
-- The names change for Unbuntu (from Centos) so:
+```
+    sudo apt install cmake sqlite doxygen (no equiv: hdf5 yaml-cpp rapidJson xz)
+```
 
+- The names change for Unbuntu (from Centos) so:
 
 ```
     sudo apt install hdf5-tools h5utils
@@ -146,13 +148,17 @@ There might be bugs in this. I do not have a virgin Ubuntu, there might be missi
 
 ## Clone the repo
 
-- cd $TOP
-- git clone https://github.com/sparcians/map.git
-- cd $MAP/sparta
+```
+    cd $TOP
+    git clone https://github.com/sparcians/map.git
+    cd $MAP/sparta
+```
 
 ## Edit the source files (for Olympia)
 
 If you are building Olympia (riscv-perf-model) make these changes to these files:
+
+<b>FIXME: Create the patch files, and include patch instructions for these and the other source file changes (buildroot, etc).</b>
 
 - Edit:
     - Change $MAP/sparta/src/TreeNodeExtensions.cpp
@@ -364,7 +370,7 @@ A patch is supplied to modify Dromajo to generate STF traces. These steps clone 
     ln -s ../../../stf_lib
 ```
 
-## Correct cmakd files 
+## Correct cmake files 
 
 stf_lib/stf-config.cmake and Dromajo CMakeLists must be edited for correct compile. 
 
@@ -399,6 +405,7 @@ Check if patch worked, dromajo should have the --stf_trace option
     console:
         --stf_trace <filename>  Dump an STF trace
 ```
+
 ------------------------------------------------------------------------
 # Boot Linux on Dromajo
 
@@ -428,7 +435,7 @@ FIXME: ADD THESE FILES TO REPO AND INSTRUCTIONS TO RETRIEVE THEM.
 ## Download and compile kernel
 
 You must have previously installed the riscv tool chain.
-See [Install riscv gnu tool Chain](##install-riscv-gnu-tool-chain)
+See [Install riscv gnu tool Chain](#install-riscv-gnu-tool-chain)
 
 ```
     cd $DROMAJO
