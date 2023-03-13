@@ -429,7 +429,7 @@ FIXME: ADD THESE FILES TO REPO AND INSTRUCTIONS TO RETRIEVE THEM.
     cp libfakeroot.c ./buildroot-2020.05.1/output/build/host-fakeroot-1.20.2/libfakeroot.c
     sudo make -C buildroot-2020.05.1
     (this is expected to finish without error)
-``
+```
 
 ## Download and compile kernel
 
