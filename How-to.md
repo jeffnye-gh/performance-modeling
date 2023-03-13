@@ -35,9 +35,9 @@ and run Ubuntu 22, GCC-11. You need sudo for this.
 # Assumed local environment variables
 
 Bash environment variables defined for clarity. Not all need to be in your
-path.
+env.
 
-Except add $RV_GNU_TOOLS/bin to your path for these instructions.
+Except: I assume $RV_GNU_TOOLS/bin is in your path for these instructions.
 
 - WGETTMP
     - Some packages require manual download using wget.
