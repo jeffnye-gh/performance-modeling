@@ -2,8 +2,6 @@
 
 # RISC-V Simulators
 
-I have not vetted all of these.
-
 - [Dromajo](https://github.com/chipsalliance/dromajo)
     - "It is a RISC-V RV64GC emulator designed for RTL co-simulation."
     - This can be patched for instrumented execution of user mode software
