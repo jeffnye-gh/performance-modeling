@@ -53,7 +53,7 @@ I have not vetted all of these.
     - Claims to boot BSD linux in 2 mins (300KIPS)
 
 - [Sparta](https://github.com/sparcians/map)
-    - FIXME
+    - This is not a simulator, but here because it is the basis of simulators.
     - Docs: https://sparcians/github.io/map/index.html
     - Api: https://sparcians/github.io/map/modeling.html
 
