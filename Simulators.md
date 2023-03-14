@@ -7,7 +7,7 @@ I have not vetted all of these.
 - [Dromajo](https://github.com/chipsalliance/dromajo)
     - "It is a RISC-V RV64GC emulator designed for RTL co-simulation."
     - This can be patched for instrumented execution of user mode software
-    - See [FIXME link to how-to](./How-to.md)
+    - See [link to progress how-to](./How-to.md). 
 
 - [GEM5](https://github.com/gem5/gem5)
     - As of 2023.03.07 site claims priv instruction set is work in progress
@@ -17,6 +17,10 @@ I have not vetted all of these.
     - Various levels of accuracy including functional and trace based
     - Claims co-simulation with SystemC 
         - (I tried briefly but never got this to work)
+    - I have used GEM5 for ARM V8 no issues 
+    - I have used this for RISC-V, 
+        - As of 4Q22/1Q23 I found the RV32 support spotty. 
+        - FIXME: revisit this for RV32I/G.
 
 - [MARSS-RISCV](https://github.com/bucaps/marss-riscv)
     - cycle level models, in order, ooo
@@ -34,6 +38,7 @@ I have not vetted all of these.
 - [QEMU](https://github.com/qemu/qemu)
     - Board level simulation platform
     - [Docs](https://www.qemu.org/docs/master/system/target-riscv.html)
+    - I have used this for ARM V7/V8 no issues within the intended purpose.
 
 - [riscv-ovpsim](https://github.com/riscv-admin/riscv-ovpsim)
     - Open source from Imperas, has commerical option
@@ -56,4 +61,5 @@ I have not vetted all of these.
     - canonical reference model, superceeded by a Sail implementation
     - Functional simulator (ISS)
     - SMP capable, in order
+    - I have used this, for bare metal apps and with PK. 
 
