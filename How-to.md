@@ -468,6 +468,7 @@ See [Install riscv gnu tool Chain](#install-riscv-gnu-tool-chain)
     cp opensbi/build/platform/generic/firmware/fw_jump.bin ./run
     cd run
     ../build/dromajo boot.cfg
+```
 
 ------------------------------------------------------------------------
 # Install docker
