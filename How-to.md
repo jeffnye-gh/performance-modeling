@@ -44,6 +44,11 @@ Except: I assume $RV_GNU_TOOLS/bin is in your path for these instructions.
     - This a temporary directory for that purpose.
     - <b>export WGETTMP=/home/jeff/Downloads</b>
 
+- PATCHES
+    - A directory with pre-modified source and patch files
+    - <b>export PATCHES=/home/jeff/Development/performance-modeling/patches</b>
+<!--    - <b>export PATCHES=/home/jeff/Development/gitbox/github/performance-modeling/patches</b> -->
+
 - TOP
     - This var points to where all repo's will live
     - <b>export TOP=/home/jeff/Development</b>
@@ -424,10 +429,10 @@ FIXME: ADD THESE FILES TO REPO AND INSTRUCTIONS TO RETRIEVE THEM.
     cp run/config-buildroot-2020.05.1 buildroot-2020.05.1/.config
     make -C buildroot-2020.05.1
     (this will fail)
-    cp c-stack.c ./buildroot-2020.05.1/output/build/host-m4-1.4.18/lib/c-stack.c
+    cp $PATCHES/c-stack.c ./buildroot-2020.05.1/output/build/host-m4-1.4.18/lib/c-stack.c
     make -C buildroot-2020.05.1
     (this will fail)
-    cp libfakeroot.c ./buildroot-2020.05.1/output/build/host-fakeroot-1.20.2/libfakeroot.c
+    cp $PATCHES/libfakeroot.c ./buildroot-2020.05.1/output/build/host-fakeroot-1.20.2/libfakeroot.c
     sudo make -C buildroot-2020.05.1
     (this is expected to finish without error)
 ```
