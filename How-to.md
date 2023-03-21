@@ -183,10 +183,17 @@ There might be bugs in this. I do not have a virgin Ubuntu, there might be missi
 
 ## Edit the source files (for Olympia)
 
-If you are building Olympia (riscv-perf-model) make these changes to these files:
 
-<b>FIXME: Create the patch files, and include patch instructions for these and the other source file changes (buildroot, etc).</b>
+<b>FIXME: Create actual patch files, for now copy the pre-edited files</b>
 
+If you are building Olympia (riscv-perf-model) you copy over two files.
+
+```
+    cp $PATCHES/TreeNodeExtensions.cpp $MAP/sparta/src/TreeNodeExtensions.cpp
+    cp $PATCHES/TreeNodeExtensions.hpp $MAP/sparta/sparta/simulation/TreeNodeExtensions.hpp
+```
+
+<!-- old instructions
 - Edit:
     - Change $MAP/sparta/src/TreeNodeExtensions.cpp
     - Roughly line 72, comment out the destructor
@@ -197,12 +204,13 @@ If you are building Olympia (riscv-perf-model) make these changes to these files
     //}
 ```
 - Edit:
-    - Change $MAP/sparta/simulation/TreeNodeExtensions.hpp
+    - Change $MAP/sparta/sparta/simulation/TreeNodeExtensions.hpp
     - Roughly line 27, define the destructor, (add the braces)
 
 ```
     virtual ~ExtensionsParamsOnly() {}
 ```
+-->
 
 ## Build Sparta
 
@@ -214,7 +222,8 @@ If you are building Olympia (riscv-perf-model) make these changes to these files
     cmake .. -DCMAKE_BUILD_TYPE=Release
     make -j4
 ```
-(idk-why, make -j16 crashes my gnome terminal, weird)
+
+TODO: idk-why, make -j16 actually crashes my gnome terminal under NoMachine.
 
 ---------
 
