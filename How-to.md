@@ -12,6 +12,10 @@ and run Ubuntu 22, GCC-11. You need sudo for this.
 
 1. [Assumed local environment variables](#assumed-local-environment-variables)
 
+<!--
+1. [Install Si-Five Freedom sdk](#install-si-five-freedom-sdk)
+-->
+
 1. [Install riscv gnu tool chain](#install-riscv-gnu-tool-chain)
 
 1. [Install Miniconda](#install-miniconda)
@@ -72,6 +76,24 @@ Except: I assume $RV_GNU_TOOLS/bin is in your path for these instructions.
 - DROMAJO
     - This var points to the dromajo under riscv-perf-model 
     - <b>export DROMAJO=/home/jeff/Development/riscv-perf-model/traces/stf_trace_gen/dromajo</b>
+
+<!--
+----------------------------------------------------------
+# Install Si-Five Freedom SDK
+
+## Download from link:
+
+FIXME: the hard wget path below will be brittle, find the repo.
+
+```
+  cd $TOP
+  mkdir -p si-five; cd si-five
+
+  wget https://static.dev.sifive.com/dev-tools/FreedomStudio-Linux_x86_64-20180122.tar.gz
+
+  tar xf FreedomStudio-Linux_x86_64-20180122.tar.gz
+```
+-->
 
 ----------------------------------------------------------
 # Install riscv gnu tool chain
@@ -364,14 +386,16 @@ This assumes you have followed the instructions above for these steps.
 
 ## Clone and patch dromajo
 
+FIXME: I need to re-create the patch, there was a fix for console io performance in dromajo, so the checksum below is no longer used, and I need to verify that the patch still works
+
 A patch is supplied to modify Dromajo to generate STF traces. These steps clone the repo, checkout the known compatible commit and patch the source.
 
 ```
     cd $OLYMPIA/traces/stf_trace_gen
     git clone https://github.com/chipsalliance/dromajo
     cd dromajo
-    git checkout 86125b31
-    git apply ../dromajo_stf_lib.patch
+    <FIXME:> git checkout 86125b31
+    <FIXME:> git apply ../dromajo_stf_lib.patch
     ln -s ../../../stf_lib
 ```
 
