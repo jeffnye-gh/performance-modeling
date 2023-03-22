@@ -7,6 +7,17 @@ WORK IN PROGRESS. THIS IS A CHECKPOINT OF ACTIVE WORK.
 I made corrections to the source package files to get these to compile
 and run Ubuntu 22, GCC-11. You need sudo for this.
 
+<i>
+If you are evaluating a design environment most if not all issues will be
+exposed upto, and  including the Boot linux step. The boot linux step, in
+particular the buildroot sub-steps will expose permissions issues.
+</i>
+<p><p>
+<i>
+From 'Install Docker' on, the instructions are important but it's unlikely 
+they will expose more issues in the design environment.
+</i>
+
 ------
 # TOC
 
@@ -33,6 +44,8 @@ and run Ubuntu 22, GCC-11. You need sudo for this.
 1. [Boot linux on Dromajo](#boot-linux-on-dromajo)
 
 1. [Install docker](#install-docker)
+
+1. [Install Si-Five Tools](#install-si-five-tools)
 
 ------
 
@@ -312,9 +325,17 @@ There is also an error in Dispatch.hpp, see below.
 
 ## Patch/modify the repo
 
+Dispatch.hpp has an error. Copy the edited file from the $PATCHES directory.
+
+FIXME: Create actual patch files, for now copy the pre-edited file over.
+
 ```
     cd $OLYMPIA
+    cp $PATCHES/Dispatch.hpp core/Dispatch.hpp
 ```
+
+
+<!--
 - Edit core/Dispatch.hpp
 - change:
 
@@ -326,6 +347,7 @@ There is also an error in Dispatch.hpp, see below.
 ```
     #include "sparta/statistics/WeightedContextCounter.hpp"
 ```
+-->
 
 ## Build the simulator
 
@@ -566,3 +588,79 @@ You should see this in the console:
     This message shows that your installation appears to be working correctly.
 ```
 
+------------------------------------------------------------------------
+# Install Si-Five Tools
+FIXME: 2023.03.21 this is broken under Ubuntu with some obscure tex2div problem.  Moving on to other repos
+
+<!--
+Instructions for installing/building these Si-Five tools:
+
+- SiFive Freedom RISC-V Tools for Embedded Development
+  - "At SiFive we've been distributing binary release packages of the embedded development tools that target our Freedom RISC-V platforms. This repository contains the scripts we use to build these tools."
+
+
+## SiFive Freedom RISC-V Tools for Embedded Development
+
+So far these instructions are the same as what is [here](https://github.com/sifive/freedom-tools). I'm duplicating for now because I expect to have to modify the instructions for our design environment. If that turns out to be the case I'll just point to the known good instructions on github.
+
+This package contains:
+
+    - riscv64-unknown-elf-*
+    - riscv-openocd-*)
+    - riscv-qemu-*
+    - sdk-utilities-*
+    - trace-decoder-*
+    - xc3sprog-*
+
+
+### Pre-reqs - Ubuntu
+
+The pre-reqs listed, I have not tried to filter this huge list. The minqw step
+reports 1GB of disk required.
+
+FIXME: Why does this need mingw? Try this again without.
+
+```
+    sudo apt install cmake autoconf automake autotools-dev curl 
+    sudo apt install libmpc-dev libmpfr-dev libgmp-dev gawk build-essential
+    sudo apt install bison flex texinfo gperf patchutils bc zlib1g-dev
+    sudo apt install libexpat-dev libtool pkg-config mingw-w64
+    sudo apt install mingw-w64-tools texlive zip python-dev gettext
+    sudo apt install libglib2.0-dev libpixman-1-dev swig ninja-build python3
+    sudo pip3 install meson
+```
+
+### Pre-reqs - Centos/RHEL 7
+
+```
+    sudo yum install autoconf automake libtool pkg-config
+    sudo yum install cmake libmpc-devel mpfr-devel gmp-devel gawk bison flex 
+    sudo yum install texinfo patchutils gcc gcc-c++ zlib-devel expat-devel
+    sudo yum install swig rh-python35 ninja-build
+    sudo pip3 install meson
+```
+
+### Clone the repo
+
+
+```
+  cd $TOP
+  git clone git@github.com:sifive/freedom-tools.git
+```
+
+### Download and build the packages
+
+This is a lengthy build. Pick only the package you need.
+
+```
+  cd $TOP/freedom-tools
+  make binutils-metal
+  make gcc-metal
+  make gdb-metal
+  make openocd
+  make qemu
+  make sdk-utilities
+  make toolchain-metal
+  make trace-decoder
+  make xc3sprog
+```
