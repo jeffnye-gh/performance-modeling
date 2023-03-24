@@ -18,14 +18,12 @@ From 'Install Docker' on, the instructions are important but it's unlikely
 they will expose more issues in the design environment.
 </i>
 
-------
+-------------------------------------------
 # TOC
 
 1. [Assumed local environment variables](#assumed-local-environment-variables)
 
-<!--
-1. [Install Si-Five Freedom sdk](#install-si-five-freedom-sdk)
--->
+1. [Paths to original README files (incomplete)](#paths-to-original-readme-files-incomplete)
 
 1. [Install riscv gnu tool chain](#install-riscv-gnu-tool-chain)
 
@@ -47,7 +45,10 @@ they will expose more issues in the design environment.
 
 1. [Install Si-Five Tools](#install-si-five-tools)
 
-------
+<!--
+1. [Install Si-Five Freedom sdk](#install-si-five-freedom-sdk)
+-->
+-------------------------------------------
 
 # Assumed local environment variables
 
@@ -56,57 +57,52 @@ env.
 
 Except: I assume $RV_GNU_TOOLS/bin is in your path for these instructions.
 
+
+# Prep
+
+Create a directory for the source root of these packages. Example
+
+- TOP
+    - This var points to where all repo's will live, cd/mkdir where you want the root of the tree to be, in this case /home/$USER/Development. Also create a temp directory for wget (if needed).
+        - cd; mkdir -p Development
+        - cd Development
+        - mkdir -p Downloads
+    - <b>export TOP=\`pwd\`</b>
+     
 - WGETTMP
     - Some packages require manual download using wget.
     - This a temporary directory for that purpose.
-    - <b>export WGETTMP=/home/jeff/Downloads</b>
+    - <b>export WGETTMP=$TOP/Downloads</b>
 
 - PATCHES
     - A directory with pre-modified source and patch files
-    - <b>export PATCHES=/home/jeff/Development/performance-modeling/patches</b>
+    - <b>export PATCHES=$TOP/performance-modeling/patches</b>
 <!--    - <b>export PATCHES=/home/jeff/Development/gitbox/github/performance-modeling/patches</b> -->
 
-- TOP
-    - This var points to where all repo's will live
-    - <b>export TOP=/home/jeff/Development</b>
-    - 
 - MAP
     - This var points to the Sparcians/Map repo copy
-    - <b>export MAP=/home/jeff/Development/map</b>
+    - <b>export MAP=$TOP/map</b>
 
 - OLYMPIA
     - This var points to the riscv-perf-model (aka Olympia) repo copy
-    - <b>export OLYMPIA=/home/jeff/Development/riscv-perf-model</b>
+    - <b>export OLYMPIA=$TOP/riscv-perf-model</b>
 
 - RV_TOOLS_SRC
     - This var points to the tool chain source directory
-    - <b>export RV_TOOLS_SRC=/home/jeff/Development/riscv-gnu-toolchain</b>
+    - <b>export RV_TOOLS_SRC=$TOP/riscv-gnu-toolchain</b>
  
 - RV_GNU_TOOLS
     - This var points to the GNU tool chain install directory. 
-    - <b>export RV_GNU_TOOLS=/home/jeff/Development/riscv-tools</b>
+    - <b>export RV_GNU_TOOLS=$TOP/riscv-tools</b>
 
 - DROMAJO
     - This var points to the dromajo under riscv-perf-model 
-    - <b>export DROMAJO=/home/jeff/Development/riscv-perf-model/traces/stf_trace_gen/dromajo</b>
+    - <b>export DROMAJO=$TOP/riscv-perf-model/traces/stf_trace_gen/dromajo</b>
 
-<!--
 ----------------------------------------------------------
-# Install Si-Five Freedom SDK
+# Paths to original README files (incomplete)
 
-## Download from link:
-
-FIXME: the hard wget path below will be brittle, find the repo.
-
-```
-  cd $TOP
-  mkdir -p si-five; cd si-five
-
-  wget https://static.dev.sifive.com/dev-tools/FreedomStudio-Linux_x86_64-20180122.tar.gz
-
-  tar xf FreedomStudio-Linux_x86_64-20180122.tar.gz
-```
--->
+FIXME: this will hold the URL's of the original README.md files
 
 ----------------------------------------------------------
 # Install riscv gnu tool chain
@@ -588,12 +584,12 @@ You should see this in the console:
     This message shows that your installation appears to be working correctly.
 ```
 
+<!--
 ------------------------------------------------------------------------
 # Install Si-Five Tools
 FIXME: 2023.03.21 this is broken under Ubuntu with some obscure tex2div problem.  Moving on to other repos
 
-<!--
-Instructions for installing/building these Si-Five tools:
+# Instructions for installing/building these Si-Five tools:
 
 - SiFive Freedom RISC-V Tools for Embedded Development
   - "At SiFive we've been distributing binary release packages of the embedded development tools that target our Freedom RISC-V platforms. This repository contains the scripts we use to build these tools."
@@ -664,3 +660,5 @@ This is a lengthy build. Pick only the package you need.
   make trace-decoder
   make xc3sprog
 ```
+
+-->
