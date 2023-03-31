@@ -1,176 +1,196 @@
 [Back to README](./README.md)
 
-# How-To Instructions
-
-WORK IN PROGRESS. THIS IS A CHECKPOINT OF ACTIVE WORK.
-
-I made corrections to the source package files to get these to compile
-and run Ubuntu 22, GCC-11. You need sudo for this.
-
-<i>
-If you are evaluating a design environment most if not all issues will be
-exposed upto, and  including the Boot linux step. The boot linux step, in
-particular the buildroot sub-steps will expose permissions issues.
-</i>
-<p><p>
-<i>
-From 'Install Docker' on, the instructions are important but it's unlikely 
-they will expose more issues in the design environment.
-</i>
+# EC2 Setup How-To Instructions
 
 -------------------------------------------
 # TOC
 
-1. [Assumed local environment variables](#assumed-local-environment-variables)
+FIXME
 
-1. [Paths to original README files (incomplete)](#paths-to-original-readme-files-incomplete)
-
-1. [Install riscv gnu tool chain](#install-riscv-gnu-tool-chain)
-
-1. [Install Miniconda](#install-miniconda)
-
-1. [Install Map Sparta](#install-map-sparta)
-
-1. [Install Map Argos](#install-map-argos)
-
-1. [Install riscv-perf-model](#install-riscv-perf-model)
-
-1. [Using pipeline data views](#using-pipeline-data-views)
-
-1. [Setup Dromajo for tracing](#setup-dromajo-for-tracing)
-
-1. [Boot linux on Dromajo](#boot-linux-on-dromajo)
-
-1. [Install docker](#install-docker)
-
-1. [Install Si-Five Tools](#install-si-five-tools)
-
-<!--
-1. [Setup-EC2-instance](#install-si-five-tools)
-
-1. [Install Si-Five Freedom sdk](#install-si-five-freedom-sdk)
--->
--------------------------------------------
-
-# Assumed local environment variables
-
-Bash environment variables defined for clarity. Not all need to be in your
-env.
-
-Except: I assume $RV_GNU_TOOLS/bin is in your path for these instructions.
-
-
-# Prep
-
-Create a directory for the source root of these packages. Example
-
-- TOP
-    - This var points to where all repo's will live, cd/mkdir where you want the root of the tree to be, in this case /home/$USER/Development. Also create a temp directory for wget (if needed).
-        - cd; mkdir -p Development
-        - cd Development
-        - mkdir -p Downloads
-    - <b>export TOP=\`pwd\`</b>
-     
-- WGETTMP
-    - Some packages require manual download using wget.
-    - This a temporary directory for that purpose.
-    - <b>export WGETTMP=$TOP/Downloads</b>
-
-- PATCHES
-    - A directory with pre-modified source and patch files
-    - <b>export PATCHES=$TOP/performance-modeling/patches</b>
-<!--    - <b>export PATCHES=/home/jeff/Development/gitbox/github/performance-modeling/patches</b> -->
-
-- MAP
-    - This var points to the Sparcians/Map repo copy
-    - <b>export MAP=$TOP/map</b>
-
-- OLYMPIA
-    - This var points to the riscv-perf-model (aka Olympia) repo copy
-    - <b>export OLYMPIA=$TOP/riscv-perf-model</b>
-
-- RV_TOOLS_SRC
-    - This var points to the tool chain source directory
-    - <b>export RV_TOOLS_SRC=$TOP/riscv-gnu-toolchain</b>
- 
-- RV_GNU_TOOLS
-    - This var points to the GNU tool chain install directory. 
-    - <b>export RV_GNU_TOOLS=$TOP/riscv-tools</b>
-
-- DROMAJO
-    - This var points to the dromajo under riscv-perf-model 
-    - <b>export DROMAJO=$TOP/riscv-perf-model/traces/stf_trace_gen/dromajo</b>
-
-<!--
 ----------------------------------------------------------
 # EC2 instance
-https://us-east-2.console.aws.amazon.com/ec2/home?region=us-east-2#Instances:instanceState=running
 
-go to dashboard
+## Create an AWS account
 
-orange launch instance -> launch instance
+FIXME: point to web resource for this
 
-name the instance -> condor_rhel9
+## Open your EC2 dash board
 
-application os images -> red hat
+FIXME: point to web resource for this
 
-scroll down:
+This uses rhel9_test1 as instance name, key/pair name, ppk file name 
+and putty session name.
 
-click create new key pair
+Default login name for Red Hat is ec2-user.
 
-name: condor_rhel9
+```
+My dashboard is located:
+    https://us-east-2.console.aws.amazon.com/ec2/home?region=us-east-2#Home:
 
-select RSA, select .ppk
+```
 
-<create keypair>
+## Start a RHEL9 instance
 
-this will create a file (for me in desktop) called condor_rhel.ppk
+```
+  go to url:$DASHBOARD
+      select Instance  <left menu>
+      click orange Launch instance, and launch instance
 
-launch instance <lower right>
+  In browser - Launch an instance page
+      create name                          - rhel9_test1
+      in Application and OS Images         - select Red Hat
+      Instance type                        - keep defaults, t2.micro, etc
 
-now in ec2 management console
+      select Create key pair key pair name - rhel9_test1
+      Keypair type                         - RSA
+      Private key file format              - .ppk
+      Select create key pair, copy file
+      copy downloaded file to known location - rhel9_test1.ppk
 
-select the instance from the table
+      Network settings - in Launch an instance page
+        keep defaults
+        Allow SSH traffic from  -  Anywhere
+ 
+      Configure storage - in Launch an instance page
+        Root volume - 1x 30  GiB gp2 
+         
+      Scroll down launch instance
 
-copy the public IPV4 ip address
+      Page: Next steps - preview
+        select -> create billing and free tier usage alerts
+        check -> Receive Free Tier Usage Alerts
+          enter email address: your address 
 
-open putty
+        go back to Next steps - preview
 
-paste ip into host name
+        select Connect to your instance
 
-type condor_rhel9 into save sessions
+        From EC2 Instance Connect tab - copy instance information
+          Instance ID       -   i-0904de081e9f67593 (rhel9_test1)
+          Public IP address -   18.218.82.93
+          User name         -   ec2-user
+```
+## Connect to instance with putty on windows
 
-save the session
+```
+   start putty
+   Left panel - select Connection
+     Open +SSH
+     Open +Auth
+     Select credentials
+        Private key file for authentication - browse to rhel9_test1.ppk
 
-click on ssh on left
+   Left panel - Session
+     Host Name (or IP address) - 18.218.82.93
+     Port                      - 22
+     Connection type           - SSH
+     Saved Sessions            - rhel9_test1
+     Select save
+   Select open
+   Accept key <ok>
+   login as: ec2-user
 
-open auth, click on credentials
+```
 
-in private key for authentication browse to condor_rhel9.ppk
+## Update instance OS
 
-click left on session
+In console (putty) window:
 
-click right save session
+```
+  bash
+  sudo yum update -y
+  cat /etc/redhat-release
+      should be at least: Red Hat Enterprise Linux release 9.1 (Plow)  
+  sudo yum install -y gcc vim git wget
 
-click open
+## Clone perf modeling how-to's
 
-as user : ec2-user
+  cd; mkdir -p Development; cd Development
+  git clone https://github.com/jeffnye-gh/performance-modeling.git
 
-once in:
+## Set how-to exported variables
+  cd; cd Development
+  mkdir -p Downloads
 
-sudo yum update
+  export TOP=`pwd`
+  export WGETTMP=$TOP/Downloads
+  export PATCHES=$TOP/performance-modeling/patches
+  export MAP=$TOP/map
+  export OLYMPIA=$TOP/riscv-perf-model
+  export RV_TOOLS_SRC=$TOP/riscv-gnu-toolchain
+  export RV_GNU_TOOLS=$TOP/riscv-tools
+  export DROMAJO=$TOP/riscv-perf-model/traces/stf_trace_gen/dromajo
 
-sudo yum install gcc vim git
+## Install riscv gnu tool chain
 
-cd; mkdir -p Development; cd Development
+### Pre-reqs
+These are listed in the order I used, I will come back and optimize
 
-git clone https://github.com/jeffnye-gh/performance-modeling.git
-bash
+```
+  sudo yum install -y autoconf automake         <might be redundant>
+  sudo yum group install -y "Development Tools"
+  sudo yum install -y libmpc-devel 
 
-sudo yum install wget
+  cd $WGETTEMP
+  wget https://rpmfind.net/linux/openmandriva/cooker/repository/x86_64/main/release/texinfo-7.0.2-3-omv2390.x86_64.rpm
+
+  sudo yum localinstall sudo yum localinstall texinfo-7.0.2-3-omv2390.x86_64.rpm
+
+```
+
+### Clone, configure, make and install
+
+This takes a long time to download
+
+```
+  cd $TOP
+  mkdir -p $RV_GNU_TOOLS
+  git clone https://github.com/riscv-collab/riscv-gnu-toolchain
+  cd $RV_TOOLS_SRC
+  ./configure --prefix=$RV_GNU_TOOLS --enable-multilib
+  make linux
+
+```
+
+# RPM help
+
+```
+    what dependencies
+      rpm -qpR texinfo-7.0.2-3-omv2390.x86_64.rpm
+
+
+texlive-dehyph
+texlive-epsf
+texlive-tex.bin
+texlive-texinfo
+
+
+```
+ 
+redhad/ec2 enabling
+
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/deploying_red_hat_enterprise_linux_9_on_public_cloud_platforms/assembly_deploying-a-virtual-machine-on-aws_cloud-content
+ 
+
+custeromer portal go here create account
+https://access.redhat.com/?session_state=86ae0d13-5fa7-4693-9f79-be0af15eec48&code=b4571181-ba3d-426c-b453-4f33eb8a0aa9.86ae0d13-5fa7-4693-9f79-be0af15eec48.4473e33a-bfd4-4fd0-9ebf-82faab4c2f6c
+
+
+go here to enable subscriptions:
+
+https://access.redhat.com/public-cloud
+
+
+
+
+
+
+
+
+
+
 
 see the export instructions from perf-modeling how to
-sudo yum group install "Development Tools"
 sudo yum install autoconf automake curl dtc libmpc-devel mpfr-devel gmp-devel libusb-devel gawk gcc-c++ bison flex gperf libtool patchutils bc zlib-devel expat-devel
 
 sudo yum install libusb-devel    fails
@@ -198,6 +218,9 @@ FIXME: this will hold the URL's of the original README.md files
 ----------------------------------------------------------
 # Install riscv gnu tool chain
 
+THIS NO LONGER WORKS. NOW FAILS ON GIT SUBMODULE UPDATE
+
+<!--
 They say you need 6.65GB of space.
 ## Pre-req and clone
 
@@ -205,12 +228,9 @@ They say you need 6.65GB of space.
   sudo apt-get install autoconf automake autotools-dev curl python3 libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build
 
   mkdir -p $RV_GNU_TOOLS   (the install path)
-  git clone https://github.com/riscv-collab/riscv-gnu-toolchain
+  git clone https://github.com/riscv/riscv-gnu-toolchain
+
 ```
-
-<!-- This path failed at one point, switched to riscv-collab  -->
-<!--  git clone https://github.com/riscv/riscv-gnu-toolchain  -->
-
 
 ## Configure, make and install
 
@@ -219,6 +239,7 @@ Install path will be $RV_GNU_TOOLS.
 ```
   cd $RV_TOOLS_SRC
   ./configure --prefix=$RV_GNU_TOOLS --enable-multilib
+  git clone https://gcc.gnu.org/git/gcc.git
   make linux
 
 ```
@@ -235,10 +256,6 @@ In accepting the license:
 
 - I am allowing the installer to run conda init
 
-- I am allowing the installer to modify my .bashrc
-
-- I manually move the conda init lines from .bashrc to my .bashrc.private
-
 
 The license instructions tell you how to disable miniconda activation at startup
 
@@ -249,12 +266,9 @@ The license instructions tell you how to disable miniconda activation at startup
 
 ```
 cd $WGETTMP
-wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 sh ./Minconda3-latest-Linux-x86_64.sh
 ```
-
-<i> Make sure you move the added .bashrc lines to a private rc file if you are in a managed environment.
-
 <i>open new terminal or reload your environment</i>
 
 ----------------------------------------------------------
@@ -416,9 +430,8 @@ There is also an error in Dispatch.hpp, see below.
 
 ```
     cd $TOP
-    git clone --recursive https://@github.com/riscv-software-src/riscv-perf-model.git
+    git clone --recursive git@github.com:riscv-software-src/riscv-perf-model.git
 ```
-<!--    git clone --recursive git@github.com:riscv-software-src/riscv-perf-model.git --.
 
 ## Patch/modify the repo
 
@@ -576,7 +589,7 @@ FIXME: ADD THESE FILES TO REPO AND INSTRUCTIONS TO RETRIEVE THEM.
 
 ```
     cd $DROMAJO
-    wget --no-check-certificate https://github.com/buildroot/buildroot/archive/2020.05.1.tar.gz
+    wget https://github.com/buildroot/buildroot/archive/2020.05.1.tar.gz
     tar xf 2020.05.1.tar.gz
     cp run/config-buildroot-2020.05.1 buildroot-2020.05.1/.config
     make -C buildroot-2020.05.1
@@ -597,7 +610,7 @@ See [Install riscv gnu tool Chain](#install-riscv-gnu-tool-chain)
 ```
     cd $DROMAJO
     export CROSS_COMPILE=riscv64-unknown-linux-gnu-
-    wget --no-check-certificate -nc https://git.kernel.org/torvalds/t/linux-5.8-rc4.tar.gz
+    wget -nc https://git.kernel.org/torvalds/t/linux-5.8-rc4.tar.gz
     tar -xf linux-5.8-rc4.tar.gz
     make -C linux-5.8-rc4 ARCH=riscv defconfig
     make -C linux-5.8-rc4 ARCH=riscv -j16
