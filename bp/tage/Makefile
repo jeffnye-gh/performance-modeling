@@ -12,7 +12,7 @@ ALL_SRC = $(wildcard src/*.cpp)
 ALL_OBJ = $(subst src,obj,$(ALL_SRC:.cpp=.o))
 ALL_DEP = $(ALL_OBJ:.o=.d))
 # --------------------------------------------------------------
-MSG_INC = -I../msg/inc
+MSG_INC = -I../../../jnutils/msg/inc
 
 DEP  = -MMD -MP
 DEF  = -DVERSION='"0.1.2"'
@@ -37,19 +37,22 @@ $(TARGET):	$(ALL_OBJ)
 	-mkdir -p bin
 	$(CPP) $(LDFLAGS) $^ -o $@ $(LIBS)
 
-OPTS = \
-  --ini file.ini \
-  --multi multi_a \
-  --multi multi_b \
-  --bool_flag \
-  --plain 42 \
-  --hidden_one 1 \
-  --hidden_two 2 \
-  --query_options \
+#OPTS = \
+#  --ini file.ini \
+#  --multi multi_a \
+#  --multi multi_b \
+#  --bool_flag \
+#  --plain 42 \
+#  --hidden_one 1 \
+#  --hidden_two 2 \
+#  --query_options \
 
 #  positional_option
 
 run:	$(TARGET)
+	$(TARGET)
+
+test:	$(TARGET)
 	@echo " ---------------------------------------------"
 	@-$(TARGET) --help
 	@echo " ---------------------------------------------"
