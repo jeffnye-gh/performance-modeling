@@ -8,6 +8,9 @@
 1. [Chapter One](#chapter-one)
 1. [Benchmark Suites](#xxx-yyy-zzz)
 
+FIXME - COMMENTED OUT UNTIL COMPLETED
+
+<!--
 -------------------------------------------
 
 # A survey of techniques for dynamic branch prediction
@@ -152,3 +155,4 @@ https://lttng.org/
 
 https://lttng.org/docs/v2.12/#doc-tracing-your-own-user-application
 
+-->

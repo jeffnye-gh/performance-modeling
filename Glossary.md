@@ -2,6 +2,8 @@
 
 # Glossary
 
+FIXME: PLACEHOLDER
+<!--
 -------------------------------------------
 
 Terminology is not always precise or used consistently across papers and 
@@ -48,3 +50,4 @@ discussion. This tries to help
     - e.g. knowing the outcome of 1 branch help prediction with another
   - Basic block
     - a section of branch-free code.
+-->
