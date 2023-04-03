@@ -26,7 +26,7 @@ CFLAGS   = $(OPT) $(DEP) $(DEF) $(INC) $(WARN)
 CPPFLAGS = $(CFLAGS) $(STD)
 LDFLAGS  = 
 # --------------------------------------------------------------
-default: run
+#default: run
 only: $(TARGET)
 # --------------------------------------------------------------
 obj/%.o: src/%.cpp
@@ -48,9 +48,27 @@ $(TARGET):	$(ALL_OBJ)
 #  --query_options \
 
 #  positional_option
+INPUT = I04 INT03 MM03 MM05 S02 S04
+TRACE   = ../traces/kaggle/input/I04.csv
+SIMPLE  = simple.csv
+RESULTS = results.txt
 
+convert_set: $(TARGET)
+	$(MAKE) convert BASE=I04
+	$(MAKE) convert BASE=INT03
+	$(MAKE) convert BASE=MM03
+	$(MAKE) convert BASE=MM05
+	$(MAKE) convert BASE=S02
+	$(MAKE) convert BASE=S04
+
+convert:	$(TARGET)
+	$(TARGET) --convert_full_trace \
+    --full_trace_fn   ../traces/kaggle/input/$(BASE).csv \
+    --simple_trace_fn ./simple_$(BASE).csv
+	
 run:	$(TARGET)
-	$(TARGET)
+	$(TARGET) --run_prediction --simple_trace_fn $(SIMPLE) \
+            --results_fn $(RESULTS)
 
 test:	$(TARGET)
 	@echo " ---------------------------------------------"
@@ -62,6 +80,14 @@ test:	$(TARGET)
 	@echo " ---------------------------------------------"
 	@$(TARGET) $(OPTS) --positional_option explicit_pos_option
 	@echo " ---------------------------------------------"
+
+val: $(TARGET)
+	valgrind --leak-check=full \
+           --show-leak-kinds=all \
+           --track-origins=yes \
+           --verbose \
+           --log-file=valgrind-out.txt \
+           $(TARGET)
 
 # Helpful to diplay values of variables, e.g. make help-DEP
 help-%:

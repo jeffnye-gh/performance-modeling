@@ -38,19 +38,16 @@ struct Options
   // ----------------------------------------------------------------
   // example options
   // ----------------------------------------------------------------
-  std::string ini_file; //not implemented yet
+  bool _query_options;
+  bool load_full_trace;
+  bool convert_full_trace;
 
-  std::vector<std::string> multi_option;
+  bool load_simple_trace;
+  bool run_prediction;
 
-  bool bool_flag;
-  bool _query_options; //also bool flag
-
-  int  plain_option;
-
-  int  hidden_one;
-  int  hidden_two;
-
-  std::string positional_option;
+  std::string full_trace_fn;
+  std::string simple_trace_fn;
+  std::string results_fn;
   // ----------------------------------------------------------------
   // ----------------------------------------------------------------
   bool notify_error;

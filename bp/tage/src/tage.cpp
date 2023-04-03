@@ -34,27 +34,18 @@ Tage::Tage()
   /// First initiating Bimodal Table
 
   // Its a simple 2 bit counter table 
-  bimodalLog = BIMODALLOG;
-
-  numBimodalEntries = (1<< bimodalLog);
+  bimodalLog = BIMODALLOG;              //14
+  numBimodalEntries = (1<< bimodalLog); //16K entries
 
   //do the size and init in one statement
+  //16K <= 0b10
   bimodal.assign(numBimodalEntries,BIMODAL_CTR_INIT);
 
-//  bimodal    = new UINT32[numBimodalEntries];
-//  for(UINT32 ii=0; ii< numBimodalEntries; ii++) {
-//    bimodal[ii]=BIMODAL_CTR_INIT; //2
-//  }
-    
   // Initialize the taggedPredictors
-  tagPredLog = TAGPREDLOG;
-  numTagPredEntries = (1 << tagPredLog);
+  tagPredLog = TAGPREDLOG;               //12
+  numTagPredEntries = (1 << tagPredLog); //4K entries
 
-  if(DEBUG) {
-    cout << " No of entries in tag predictors = " 
-         << numTagPredEntries << endl;          
-  }
- 
+  //Number of tables is 4, each table is 4K entries of TagEntry
   for(UINT32 ii = 0; ii < NUMTAGTABLES ; ii++) {
     tagPred[ii] = new TagEntry[numTagPredEntries];
   }
@@ -70,19 +61,16 @@ Tage::Tage()
   // Geometric lengths of history taken to consider correlation 
   // of different age.
 
-  // Table 0 with the longest history as per PPM code
-  geometric[0] = 130;
-  geometric[1] = 44;  // 1/3
+  geometric[0] = 130; // Table 0 with the longest history as per PPM code
+  geometric[1] = 44;
   geometric[2] = 15;
   geometric[3] = 5;
 
-  /*
-     this gives 3.41 MPKI !!
-     geometric[0] = 200;
-     geometric[1] = 80;
-     geometric[2] = 20;
-     geometric[3] = 5;
-  */ 
+  // this gives 3.41 MPKI !!
+  //   geometric[0] = 200;
+  //   geometric[1] = 80;
+  //   geometric[2] = 20;
+  //   geometric[3] = 5;
     
   // Initializing Compressed Buffers.
   // first for index of the the tagged tables
@@ -286,7 +274,6 @@ bool Tage::GetPrediction(UINT32 PC) {
 void  Tage::UpdatePredictor(UINT32 PC, bool resolveDir, 
                             bool predDir, UINT32 branchTarget)
 {
- 
   bool strong_old_present = false;
   bool new_entry = 0;    
   if (primeBank < NUMTAGTABLES) {
@@ -363,9 +350,8 @@ void  Tage::UpdatePredictor(UINT32 PC, bool resolveDir,
     }
   }
 
-
   // Proceeding to allocation of the entry.
-  if((!new_entry) || (new_entry && (primePred != resolveDir))) {    
+  if((!new_entry) || (new_entry && (primePred != resolveDir))) {
     if (((predDir != resolveDir) & (primeBank > 0))) {
                     
       for (int i = 0; i < primeBank; i++) {
@@ -387,7 +373,9 @@ void  Tage::UpdatePredictor(UINT32 PC, bool resolveDir,
         srand(time(NULL));
         int randNo = rand() % 100;
         int count = 0;
-        int bank_store[NUMTAGTABLES - 1] = {-1, -1, -1};
+        vector<int> bank_store = {-1, -1, -1};
+        //with this I get a stack smashing error
+        //int bank_store[NUMTAGTABLES - 1] = {-1, -1, -1};
         int matchBank = 0;
         for (int i = 0; i < primeBank; i++) {
 
@@ -459,7 +447,7 @@ void  Tage::UpdatePredictor(UINT32 PC, bool resolveDir,
 
   
   // update the GHR
-  GHR = (GHR << 1);
+  GHR <<=1; //this causes stack smash error: GHR = (GHR << 1);
 
   if(resolveDir == TAKEN){
     GHR.set(0,1); 
@@ -472,15 +460,16 @@ void  Tage::UpdatePredictor(UINT32 PC, bool resolveDir,
             
   }
 
-  // PHR update is simple, jus take the last bit ??
+  // PHR update is simple, just take the last bit ??
   // Always Limited to 16 bits as per paper.
-  PHR = (PHR << 1); 
+  PHR <<= 1; //more stack smashing with this: PHR = (PHR << 1); 
 
   if(PC & 1) {
     PHR = PHR + 1;
   }
 
   PHR = (PHR & ((1 << 16) - 1));
+
 }
 
 /////////////////////////////////////////////////////////////
@@ -495,7 +484,6 @@ void    Tage::TrackOtherInst(UINT32 PC, OpType opType, UINT32 branchTarget){
 
   return;
 }
-
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -21,7 +21,6 @@
 #define TAGPREDLOG       12
 
 using namespace std; //FIXME
-
 // =====================================================================
 // Each entry in the tag Pred Table
 // =====================================================================
@@ -47,7 +46,6 @@ struct CompressedHist
   UINT32 compHist;
       
   void updateCompHist(bitset<131> ghr) {
-
 /*
     bitset<131> temp;;
     int numFolds = geomLength / targetLength;
@@ -88,111 +86,6 @@ struct CompressedHist
          
   }    
 };
-
-
-
-//// =====================================================================
-//// Initialize predictor tables
-////for i = 0 to kNumTables - 1
-////  table[i]
-////    = new TAGETable(1 << (i + kLogMinTableSize),
-////                         kTagWidths[i], 
-////                         kTagCompBits[i],
-////                         kCtrBits,
-////                         kHistLengths[i],
-////                         kUseAltPred,
-////                         kUseBiModal,
-////                         kUseExtraBits,
-////                         kUseLoopPred,
-////                         kUseUpdateThreshold);
-////
-////  stat_corr_table = new StatisticalCorrector(kStatCorrSize,
-////                                             kStatCorrHistLength,
-////                                             kUseUpdateThreshold);
-////
-////  local_history_table = new LocalHistoryTable(kLocalHistTableSize,
-////                                              kLocalHistLength);
-////
-////  global_history = 0;
-////
-////  // Update predictor on each branch instruction
-////  for each branch instruction:
-////  // Calculate table index and tag
-////    tage_index = CalculateTAGEIndex(pc, global_history,
-////                                    local_history_table.local_history,
-////                                    table_index,
-////                                    table[table_index].table_size);
-////    tag = CalculateTag(pc,
-////                       table[table_index].tag_width,
-////                       table[table_index].tag_comp_bits);
-////  
-////    // Lookup entry in TAGE table
-////    entry = table[table_index].table[tage_index];
-////  
-////    // Predict using TAGE table
-////    pred = entry.prediction;
-////    if (entry.alt_pred != 0 && entry.use_alt_pred) {
-////      alt_tage_index = CalculateAltTAGEIndex(pc, global_history, local_history_table.local_history, table_index, table[table_index].table_size);
-////      alt_entry = table[table_index].table[alt_tage_index];
-////      pred = (entry.alt_ctr >= 0) ? entry.alt_pred : alt_entry.prediction;
-////    }
-////  
-////    // Update statistical corrector
-////    stat_corr_index = CalculateStatCorrIndex(pc, global_history, local_history_table.local_history, stat_corr_table.size);
-////    stat_corr_entry = stat_corr_table.table[stat_corr_index];
-////    sc_pred = (entry.sc_ctr >= 0) ? pred : stat_corr_entry.prediction;
-////    stat_corr_table.Update(pc, sc_pred, resolve_dir);
-////    
-////    // Update local history table
-////    local_history_table.Update(pc, resolve_dir);
-////  
-////    // Update TAGE table
-////    tage_pred_dir = (entry.ctr >= 0);
-////    if (tage_pred_dir != resolve_dir || abs(entry.ctr) < kThreshold[tage_index]) {
-////      tage_pred_dir = (entry.alt_ctr >= 0) ? entry.alt_pred_dir : tage_pred_dir;
-////    }
-////    table[table_index].table[tage_index].Update(resolve_dir, tage_pred_dir, tag, table[table_index].tag_comp_bits);
-////    
-////    // Update global history
-////    global_history = ((global_history << 1) | resolve_dir) & ((1 << kGlobalHistLength) - 1);
-////    
-////    // Update branch history and table index
-////    local_history_table.Update(pc, resolve_dir);
-////    table_index = CalculateTableIndex(pc, global_history);
-////  end for
-//// =====================================================================
-//// =====================================================================
-//// Define SimpleTAGE predictor parameters
-//const int kNumTables        = 10;          // number of tables
-//const int kMaxHistoryLength = 200;         // maximum history length
-//const int kMinHistoryLength = 5;           // minimum history length
-//const int kGeometricHistoryLengthStep = 2; // geometric history length step
-//
-//struct SimpleTAGEEntry {
-//  int tag;
-//  int ctr;
-//};
-//
-//struct SimpleTAGETable {
-//  int table_size;
-//  SimpleTAGEEntry* table;
-//};
-//
-//struct SimpleTAGEPredictor {
-//  int history_length;
-//  int table_index[kNumTables];
-//  SimpleTAGETable table[kNumTables];
-//  int geometric_history_length[kNumTables];
-//  int geometric_history_length_selector;
-//  int global_history;
-//};
-//
-//struct SimpleTage
-//{
-//  void InitializeTAGEPredictor(SimpleTAGEPredictor*);
-//  void UpdateTAGEPredictor(SimpleTAGEPredictor*,int,bool);
-//  
-//};
 // =====================================================================
 //
 // Total storage budget: 32KB (PHT) + 17 bits (GHR)a

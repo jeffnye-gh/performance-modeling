@@ -64,31 +64,38 @@ void Options::build_options(po::options_description &stdOpts,
     ("query_options",po::bool_switch(&_query_options)->default_value(false),
      "report option settings and exit")
 
-    ("ini",   po::value<string>(&ini_file), 
-     "Path to json configuration file")
+    ("full_trace_fn",   po::value<string>(&full_trace_fn), 
+     "Full trace file name")
 
-    ("multi", po::value<vector<string> >(&multi_option),
-     "Example multiple instance option")
+    ("simple_trace_fn",   po::value<string>(&simple_trace_fn), 
+     "Simple trace file name")
 
-    ("bool_flag", po::bool_switch(&bool_flag),
-     "Example flag option")
+    ("results_fn",   po::value<string>(&results_fn), 
+     "Prediction results file name")
 
-    ("plain,p", po::value<int>(&plain_option),
-     "Integer option with short and long form")
+    ("load_full_trace", po::bool_switch(&load_full_trace),
+     "")
+
+    ("convert_full_trace", po::bool_switch(&convert_full_trace),
+     "requires full trace and simple trace file names")
+
+    ("run_prediction", po::bool_switch(&run_prediction),
+     "requires simple trace file and results file name")
+
   ;
 
-  hiddenOpts.add_options()
-    ("hidden_one", po::value<int>(&hidden_one),
-     "Hidden option #1, accepted but not listed in usage")
-
-    ("hidden_two", po::value<int>(&hidden_two),
-     "Hidden option #2, accepted but not listed in usage")
-
-    ("positional_option", po::value<string>(&positional_option),
-     "Positional option example")
-  ;
-
-  posOpts.add("positional_option",-1); 
+//  hiddenOpts.add_options()
+//    ("hidden_one", po::value<int>(&hidden_one),
+//     "Hidden option #1, accepted but not listed in usage")
+//
+//    ("hidden_two", po::value<int>(&hidden_two),
+//     "Hidden option #2, accepted but not listed in usage")
+//
+//    ("positional_option", po::value<string>(&positional_option),
+//     "Positional option example")
+//  ;
+//
+//  posOpts.add("positional_option",-1); 
 }
 // --------------------------------------------------------------------
 // Check sanity on the options, handle --help, --version
@@ -141,19 +148,24 @@ void Options::version()
 // --------------------------------------------------------------------
 void Options::query_options()
 {
-  msg->imsg("BEG Options::query_options()");
-  msg->imsg("ini_file         : "+ini_file);
-  msg->imsg("bool_flag        : "+string(bool_flag ? "True" : "False"));
-  msg->imsg("_query_options   : "+string(_query_options ? "True" : "False"));
-  msg->imsg("plain_options    : "+::to_string(plain_option));
-  msg->imsg("hidden_one       : "+::to_string(hidden_one));
-  msg->imsg("hidden_two       : "+::to_string(hidden_two));
-  msg->imsg("positional_option: "+positional_option);
-
-  msg->imsg("Multi-option");
-  for(size_t i=0;i<multi_option.size();++i) {
-    msg->imsg( "  #"+::to_string(i)+ " : "+multi_option[i]);
-  }
-
-  msg->imsg("END Options::query_options()");
+//  msg->imsg("BEG Options::query_options()");
+//  msg->imsg("full_trace_fn : "po::value<string>(&full_trace_fn),
+//     "Full trace file name")
+//
+//  msg->imsg("simple_trace_fn",   po::value<string>(&simple_trace_fn),
+//     "Simple trace file name")
+//
+//  msg->imsg("results_fn",   po::value<string>(&simple_trace_fn),
+//     "Prediction results file name")
+//
+//  msg->imsg("load_full_trace", po::bool_switch(&load_full_trace),
+//     "")
+//
+//  msg->imsg("convert_full_trace", po::bool_switch(&convert_full_trace),
+//     "requires full trace and simple trace file names")
+//
+//  msg->imsg("run_prediction", po::bool_switch(&run_prediction),
+//     "requires simple trace file and results file name")
+//
+//  msg->imsg("END Options::query_options()");
 }
