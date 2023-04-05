@@ -218,6 +218,7 @@ Install path will be $RV_GNU_TOOLS.
 
 ```
   cd $RV_TOOLS_SRC
+  git config http.sslVerify false
   ./configure --prefix=$RV_GNU_TOOLS --enable-multilib
   make linux
 
