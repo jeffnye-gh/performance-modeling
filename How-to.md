@@ -101,6 +101,14 @@ Create a directory for the source root of these packages. Example
     - This var points to the dromajo under riscv-perf-model 
     - <b>export DROMAJO=$TOP/riscv-perf-model/traces/stf_trace_gen/dromajo</b>
 
+# Assumed environment modules
+
+    module load grid/python
+    module load grid/gcc/12.2.0
+    module load condor/experimental/cmake
+    module load condor/experimental/boost
+    
+
 <!--
 ----------------------------------------------------------
 # EC2 instance
@@ -329,7 +337,6 @@ If you are building Olympia (riscv-perf-model) you copy over two files.
 ```
     cd $MAP/sparta
     mkdir release; cd release
-    CONDOR: module load condor/experimental/cmake
     cmake .. -DCMAKE_BUILD_TYPE=Release
     make -j4
 ```
