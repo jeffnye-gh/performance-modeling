@@ -329,6 +329,7 @@ If you are building Olympia (riscv-perf-model) you copy over two files.
 ```
     cd $MAP/sparta
     mkdir release; cd release
+    CONDOR: module load condor/experimental/cmake
     cmake .. -DCMAKE_BUILD_TYPE=Release
     make -j4
 ```
