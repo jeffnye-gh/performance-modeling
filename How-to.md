@@ -213,6 +213,7 @@ They say you need 6.65GB of space.
   sudo apt-get install autoconf automake autotools-dev curl python3 libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build
 
   mkdir -p $RV_GNU_TOOLS   (the install path)
+  export PATH=$RV_GNU_TOOLS/bin:$PATH
   git clone https://github.com/riscv-collab/riscv-gnu-toolchain
 ```
 
@@ -227,10 +228,11 @@ Install path will be $RV_GNU_TOOLS.
 ```
   cd $RV_TOOLS_SRC
   git config http.sslVerify false
-  export PATH=$RV_GNU_TOOLS/bin:$PATH
+  mkdir build;cd build
   ./configure --prefix=$RV_GNU_TOOLS --enable-multilib
-  make linux
-
+  make linux    # gnu linux tool chain
+  OR
+  make          #bare metal tools chain
 ```
 -->
 
