@@ -104,11 +104,13 @@ Create a directory for the source root of these packages. Example
 # Assumed environment modules
 
     module load grid/python
-    module load grid/gcc/12.2.0
-    module load condor/experimental/cmake
-    module load condor/experimental/boost
-    
+    module load condor/cmake
+    module load condor/boost
+    module load condor/make
 
+    module unload grid/xcelium
+    module load grid/gcc/12.2.0
+    
 <!--
 ----------------------------------------------------------
 # EC2 instance
@@ -232,7 +234,7 @@ Install path will be $RV_GNU_TOOLS.
   ./configure --prefix=$RV_GNU_TOOLS --enable-multilib
   make linux    # gnu linux tool chain
   OR
-  make          #bare metal tools chain
+  make          #bare metal tool chain
 ```
 -->
 
