@@ -32,6 +32,8 @@ they will expose more issues in the design environment.
 1. [Install Map Sparta](#install-map-sparta)
 
 1. [Install Map Argos](#install-map-argos)
+    
+1. [Install Map STF Lib](#install-map-stf_lib)
 
 1. [Install riscv-perf-model](#install-riscv-perf-model)
 
@@ -408,6 +410,21 @@ Your terminal should have an active sparta/conda dev environment. See above.
     make -j4
 ```
 
+
+---------
+
+# Install Map STF Lib
+
+STF is a library supporting the Simulation Trace Format. 
+
+```
+    git clone https://github.com/sparcians/stf_lib.git
+    cd stf_lib
+    git checkout 742037fb80bfe97cb27d7063e24f9bb60b0144f3
+    mkdir -p release; cd release
+    cmake -DCMAKE_BUILD_TYPE=Release ..
+    make -j16
+```
 
 ---------
 
