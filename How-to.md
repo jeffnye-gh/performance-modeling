@@ -56,11 +56,11 @@ they will expose more issues in the design environment.
 
 # Assumed local environment variables
 
-Bash environment variables defined for clarity. Not all need to be in your
-env.
+Bash environment variables defined for clarity.
+I assume $RV_GNU_TOOLS/bin is in your path for these instructions.
 
-Except: I assume $RV_GNU_TOOLS/bin is in your path for these instructions.
-
+There is a BASH script rc file in performance-modeling/patches/setuprc.sh. You can source this file to do all of the following.
+    To use it cd to your 'top' directory and 'source performance-modeling/patches/setuprc.sh'
 
 # Prep
 
