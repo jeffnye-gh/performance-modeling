@@ -59,8 +59,7 @@ they will expose more issues in the design environment.
 Bash environment variables defined for clarity.
 I assume $RV_GNU_TOOLS/bin is in your path for these instructions.
 
-There is a BASH script rc file in performance-modeling/patches/setuprc.sh. You can source this file to do all of the following.
-    To use it cd to your 'top' directory and 'source performance-modeling/patches/setuprc.sh'
+There is a BASH script rc file in performance-modeling/patches/setuprc.sh. You can source this file to do all of the steps in the following Prep section. To use it cd to your 'top' directory and 'source performance-modeling/patches/setuprc.sh'
 
 # Prep
 
