@@ -33,7 +33,7 @@ they will expose more issues in the design environment.
 
 1. [Install Map Argos](#install-map-argos)
     
-1. [Install Map STF Lib](#install-map-stf_lib)
+1. [Install Map STF Lib](#install-map-stf-lib)
 
 1. [Install riscv-perf-model](#install-riscv-perf-model)
 
@@ -197,7 +197,7 @@ sudo yum -y install hdf5
 sudo yum -y install yaml-cpp 
 sudo yum -y install rapidJson 
 sudo yum -y install xz
-
+-->
 
 
 <!--
