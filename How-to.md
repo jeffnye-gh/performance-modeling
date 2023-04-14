@@ -56,10 +56,11 @@ they will expose more issues in the design environment.
 
 # Assumed local environment variables
 
-Bash environment variables defined for clarity.
-I assume $RV_GNU_TOOLS/bin is in your path for these instructions.
+Bash environment variables defined for clarity. Not all need to be in your
+env.
 
-There is a BASH script rc file in performance-modeling/patches/setuprc.sh. You can source this file to do all of the steps in the following Prep section. To use it cd to your 'top' directory and 'source performance-modeling/patches/setuprc.sh'
+Except: I assume $RV_GNU_TOOLS/bin is in your path for these instructions.
+
 
 # Prep
 
@@ -94,9 +95,13 @@ Create a directory for the source root of these packages. Example
     - This var points to the tool chain source directory
     - <b>export RV_TOOLS_SRC=$TOP/riscv-gnu-toolchain</b>
  
-- RV_GNU_TOOLS
+- RV_BAREMETAL_TOOLS
     - This var points to the GNU tool chain install directory. 
-    - <b>export RV_GNU_TOOLS=$TOP/riscv-tools</b>
+    - <b>export RV_BAREMETAL_TOOLS=$TOP/riscv64-unknown-elf</b>
+
+- RV_LINUX_TOOLS
+    - This var points to the GNU tool chain install directory. 
+    - <b>export RV_LINUX_TOOLS=$TOP/riscv64-unknown-linux-gnu</b>
 
 - DROMAJO
     - This var points to the dromajo under riscv-perf-model 
@@ -111,93 +116,6 @@ Create a directory for the source root of these packages. Example
 
     module unload grid/xcelium
     module load grid/gcc/12.2.0
-    
-<!--
-----------------------------------------------------------
-# EC2 instance
-https://us-east-2.console.aws.amazon.com/ec2/home?region=us-east-2#Instances:instanceState=running
-
-go to dashboard
-
-orange launch instance -> launch instance
-
-name the instance -> condor_rhel9
-
-application os images -> red hat
-
-scroll down:
-
-click create new key pair
-
-name: condor_rhel9
-
-select RSA, select .ppk
-
-<create keypair>
-
-this will create a file (for me in desktop) called condor_rhel.ppk
-
-launch instance <lower right>
-
-now in ec2 management console
-
-select the instance from the table
-
-copy the public IPV4 ip address
-
-open putty
-
-paste ip into host name
-
-type condor_rhel9 into save sessions
-
-save the session
-
-click on ssh on left
-
-open auth, click on credentials
-
-in private key for authentication browse to condor_rhel9.ppk
-
-click left on session
-
-click right save session
-
-click open
-
-as user : ec2-user
-
-once in:
-
-sudo yum update
-
-sudo yum install gcc vim git
-
-cd; mkdir -p Development; cd Development
-
-git clone https://github.com/jeffnye-gh/performance-modeling.git
-bash
-
-sudo yum install wget
-
-see the export instructions from perf-modeling how to
-sudo yum group install "Development Tools"
-sudo yum install autoconf automake curl dtc libmpc-devel mpfr-devel gmp-devel libusb-devel gawk gcc-c++ bison flex gperf libtool patchutils bc zlib-devel expat-devel
-
-sudo yum install libusb-devel    fails
-sudo yum install texinfo fails
-
-
-sudo yum -y install cmake 
-sudo yum -y install sqlite 
-sudo dnf config-manager --set-enabled PowerTools
-sudo yum -y install doxygen 
-sudo yum -y install hdf5 
-sudo yum -y install yaml-cpp 
-sudo yum -y install rapidJson 
-sudo yum -y install xz
--->
-
 
 <!--
 ----------------------------------------------------------
@@ -210,31 +128,50 @@ FIXME: this will hold the URL's of the original README.md files
 # Install riscv gnu tool chain
 
 They say you need 6.65GB of space.
+
 ## Pre-req and clone
+
+There are two versions of the tool chain, linux and bare metal, these are
+built from the same source, with different install prefixes. Be aware of the
+PATH settings in the instructions, if you are building both.
 
 ```
   sudo apt-get install autoconf automake autotools-dev curl python3 libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build
 
-  mkdir -p $RV_GNU_TOOLS   (the install path)
-  export PATH=$RV_GNU_TOOLS/bin:$PATH
+  mkdir -p $RV_LINUX_TOOLS       (the linux tool chain install path)
+  mkdir -p $RV_BAREMETAL_TOOLS   (the bare metal tool chain install path)
   git clone https://github.com/riscv-collab/riscv-gnu-toolchain
+  cd riscv-gnu-toolchain
+  git config http.sslVerify false
 ```
 
+<!--  export PATH=$RV_GNU_TOOLS/bin:$PATH --
 <!-- This path failed at one point, switched to riscv-collab  -->
 <!--  git clone https://github.com/riscv/riscv-gnu-toolchain  -->
 
 
 ## Configure, make and install
 
-Install path will be $RV_GNU_TOOLS.
+### Linux tool version
+Install path will be $RV_LINUX_TOOLS.
 
 ```
+  export PATH=$RV_LINUX_TOOLS/bin:$PATH
   cd $RV_TOOLS_SRC
-  git config http.sslVerify false
+  rm -rf build
   mkdir build;cd build
-  ./configure --prefix=$RV_GNU_TOOLS --enable-multilib
+  ../configure --prefix=$RV_LINUX_TOOLS --enable-multilib
   make linux    # gnu linux tool chain
-  OR
+```
+
+### Bare metal version
+Install path will be $RV_BAREMETAL_TOOLS.
+```
+  export PATH=$RV_BAREMETAL_TOOLS/bin:$PATH
+  cd $RV_TOOLS_SRC
+  rm -rf build
+  mkdir build;cd build
+  ../configure --prefix=$RV_BAREMETAL_TOOLS --enable-multilib
   make          #bare metal tool chain
 ```
 -->
@@ -793,3 +730,55 @@ This is a lengthy build. Pick only the package you need.
 ```
 
 -->
+
+<!--
+----------------------------------------------------------
+# EC2 instance
+https://us-east-2.console.aws.amazon.com/ec2/home?region=us-east-2#Instances:instanceState=running
+go to dashboard
+orange launch instance -> launch instance
+name the instance -> condor_rhel9
+application os images -> red hat
+scroll down:
+click create new key pair
+name: condor_rhel9
+select RSA, select .ppk
+<create keypair>
+this will create a file (for me in desktop) called condor_rhel.ppk
+launch instance <lower right>
+now in ec2 management console
+select the instance from the table
+copy the public IPV4 ip address
+open putty
+paste ip into host name
+type condor_rhel9 into save sessions
+save the session
+click on ssh on left
+open auth, click on credentials
+in private key for authentication browse to condor_rhel9.ppk
+click left on session
+click right save session
+click open
+as user : ec2-user
+once in:
+sudo yum update
+sudo yum install gcc vim git
+cd; mkdir -p Development; cd Development
+git clone https://github.com/jeffnye-gh/performance-modeling.git
+bash
+sudo yum install wget
+see the export instructions from perf-modeling how to
+sudo yum group install "Development Tools"
+sudo yum install autoconf automake curl dtc libmpc-devel mpfr-devel gmp-devel libusb-devel gawk gcc-c++ bison flex gperf libtool patchutils bc zlib-devel expat-devel
+sudo yum install libusb-devel    fails
+sudo yum install texinfo fails
+sudo yum -y install cmake 
+sudo yum -y install sqlite 
+sudo dnf config-manager --set-enabled PowerTools
+sudo yum -y install doxygen 
+sudo yum -y install hdf5 
+sudo yum -y install yaml-cpp 
+sudo yum -y install rapidJson 
+sudo yum -y install xz
+-->
+
