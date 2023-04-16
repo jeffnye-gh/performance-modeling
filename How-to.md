@@ -499,6 +499,7 @@ stf_lib/stf-config.cmake and Dromajo CMakeLists must be edited for correct compi
 
 ```
     cd $DROMAJO
+    ln -s ../stf_lib
     mkdir -p build; cd build
     cmake ..
     make -j4
@@ -518,6 +519,9 @@ Check if patch worked, dromajo should have the --stf_trace option
 ------------------------------------------------------------------------
 # Boot Linux on Dromajo
 
+You must have previously installed the riscv gnu tool chain.
+See [Install riscv gnu tool chain](#install-riscv-gnu-tool-chain)
+
 ## Create buildroot image
 
 The make of build root downloads some files. Some of these files need
@@ -532,19 +536,31 @@ FIXME: ADD THESE FILES TO REPO AND INSTRUCTIONS TO RETRIEVE THEM.
     tar xf 2020.05.1.tar.gz
     cp run/config-buildroot-2020.05.1 buildroot-2020.05.1/.config
     make -C buildroot-2020.05.1
-    (this will fail)
+    (this may fail, if so copy this file)
     cp $PATCHES/c-stack.c ./buildroot-2020.05.1/output/build/host-m4-1.4.18/lib/c-stack.c
     make -C buildroot-2020.05.1
-    (this will fail)
+    (this may fail, if so copy this file)
     cp $PATCHES/libfakeroot.c ./buildroot-2020.05.1/output/build/host-fakeroot-1.20.2/libfakeroot.c
     sudo make -C buildroot-2020.05.1
     (this is expected to finish without error)
 ```
 
 ## Download and compile kernel
+### Check path to the linux gnu tool chain
 
-You must have previously installed the riscv tool chain.
-See [Install riscv gnu tool Chain](#install-riscv-gnu-tool-chain)
+Check that riscv64-unknown-linux-gnu-gcc is in your path. 
+
+```
+which riscv64-unknown-linux-gnu-gcc
+```
+
+If not export to your PATH variable as shown.
+
+```
+export PATH=$RV_LINUX_TOOLS/bin:$PATH
+```
+
+### Get and build kernel
 
 ```
     cd $DROMAJO
@@ -577,7 +593,61 @@ See [Install riscv gnu tool Chain](#install-riscv-gnu-tool-chain)
     cp opensbi/build/platform/generic/firmware/fw_jump.bin ./run
     cd run
     ../build/dromajo boot.cfg
+
 ```
+login is root, password is root
+
+Use kill <pid> to exit dromajo. 
+
+------------------------------------------------------------------------
+# Running programs on dromajo
+
+For now I'm referencing external docs for running dromajo.
+
+[Running baremetal and linux based apps on dromajo](https://github.com/chipsalliance/dromajo/blob/master/doc/setup.md)
+
+[Running instrumented apps on dromajo to generate STF traces](https://github.com/riscv-software-src/riscv-perf-model/tree/master/traces)
+
+
+------------------------------------------------------------------------
+# Instrumenting a linux based application
+
+cd $DROMAJO/run
+
+Edit program to contain START_TRACE; and STOP_TRACE;
+
+vi dhrystone/dhry_1.c
+
+...
+START_TRACE;
+for (Run_Index = 1; Run_Index <= Number_Of_Runs; ++Run_Index)
+...
+} /* loop "for Run_Index" */
+STOP_TRACE;
+...
+
+make
+
+riscv64-unknown-elf-gcc -c -O3 -DTIME -I./dhrystone -I../../riscv-perf-model/traces/stf_trace_gen dhrystone/dhry_1.c -o obj/dhry_1.o
+
+riscv64-unknown-elf-gcc -c -O3 -DTIME -I./dhrystone -I../../riscv-perf-model/traces/stf_trace_gen dhrystone/dhry_2.c -o obj/dhry_2.o
+
+riscv64-unknown-elf-gcc  obj/dhry_1.o obj/dhry_2.o -o bin/dhry.riscv.elf
+
+cd $DROMAJO
+sudo cp run/bin/dhry.riscv.elf ./buildroot-2020.05.1/output/target/sbin/
+
+sudo make -C buildroot-2020.05.1
+cd run
+
+cp ../buildroot-2020.05.1/output/images/rootfs.cpio .
+../build/dromajo --stf_trace my_trace.zstf boot.cfg
+
+login: root
+password: root
+
+dhry.riscv.elf
+
 
 <!--
 ------------------------------------------------------------------------
