@@ -43,11 +43,11 @@ they will expose more issues in the design environment.
 
 1. [Boot linux on Dromajo](#boot-linux-on-dromajo)
 
+<!--
 1. [Install docker](#install-docker)
 
 1. [Install Si-Five Tools](#install-si-five-tools)
 
-<!--
 1. [Setup-EC2-instance](#install-si-five-tools)
 
 1. [Install Si-Five Freedom sdk](#install-si-five-freedom-sdk)
@@ -96,11 +96,11 @@ Create a directory for the source root of these packages. Example
     - <b>export RV_TOOLS_SRC=$TOP/riscv-gnu-toolchain</b>
  
 - RV_BAREMETAL_TOOLS
-    - This var points to the GNU tool chain install directory. 
+    - This var points to the gnu bare metal tool chain install directory. 
     - <b>export RV_BAREMETAL_TOOLS=$TOP/riscv64-unknown-elf</b>
 
 - RV_LINUX_TOOLS
-    - This var points to the GNU tool chain install directory. 
+    - This var points to the gnu linux tool chain install directory. 
     - <b>export RV_LINUX_TOOLS=$TOP/riscv64-unknown-linux-gnu</b>
 
 - DROMAJO
@@ -239,6 +239,8 @@ There might be bugs in this. I do not have a virgin Ubuntu, there might be missi
 ```
     cd $TOP
     git clone https://github.com/sparcians/map.git
+    cd map
+    git checkout 277037f3cc2594df0ba04e3ad92d41d95e9ea3f9
     cd $MAP/sparta
 ```
 
@@ -253,25 +255,6 @@ If you are building Olympia (riscv-perf-model) you copy over two files.
     cp $PATCHES/TreeNodeExtensions.cpp $MAP/sparta/src/TreeNodeExtensions.cpp
     cp $PATCHES/TreeNodeExtensions.hpp $MAP/sparta/sparta/simulation/TreeNodeExtensions.hpp
 ```
-
-<!-- old instructions
-- Edit:
-    - Change $MAP/sparta/src/TreeNodeExtensions.cpp
-    - Roughly line 72, comment out the destructor
-
-```
-    //ExtensionsParamsOnly::~ExtensionsParamsOnly()
-    //{
-    //}
-```
-- Edit:
-    - Change $MAP/sparta/sparta/simulation/TreeNodeExtensions.hpp
-    - Roughly line 27, define the destructor, (add the braces)
-
-```
-    virtual ~ExtensionsParamsOnly() {}
-```
--->
 
 ## Build Sparta
 
@@ -428,9 +411,9 @@ Choose what to build. I chose just olympia.
 ```
     cd $OLYMPIA
     mkdir -p release; cd release
-    make -j4     # build everything
     make olympia # build the simulator only
-    make regress 
+    #make -j4       # build everything
+    #make regress   # as it says
 ```
 
 ---------
@@ -478,6 +461,8 @@ This assumes you have followed the instructions above for these steps.
 ------------------------------------------------------------------------
 # Setup Dromajo for tracing
 
+The original README for adding tracing to dromajo is in the olympia traces readme.
+$OLYMPIA/traces/README.md
 
 ## Clone and patch dromajo
 
@@ -594,6 +579,7 @@ See [Install riscv gnu tool Chain](#install-riscv-gnu-tool-chain)
     ../build/dromajo boot.cfg
 ```
 
+<!--
 ------------------------------------------------------------------------
 # Install docker
 
@@ -652,7 +638,6 @@ You should see this in the console:
     This message shows that your installation appears to be working correctly.
 ```
 
-<!--
 ------------------------------------------------------------------------
 # Install Si-Five Tools
 FIXME: 2023.03.21 this is broken under Ubuntu with some obscure tex2div problem.  Moving on to other repos
